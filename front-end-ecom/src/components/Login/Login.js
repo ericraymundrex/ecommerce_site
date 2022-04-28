@@ -9,10 +9,13 @@ const Login = () => {
     const loginHandler = async(event) =>{
       event.preventDefault();
       let token=await axios.post("http://localhost:5000/merchant/login",{
-            email,
-            password
+            email:email,
+            password:password
         });
-        localStorage("token",token)
+        console.log(token.data.token)
+        localStorage.setItem("token",token.data.token)
+        setEmail('')
+        setPassword('')
     }
     const emailChangeHandler = (event) => {
         setEmail(event.target.value)

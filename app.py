@@ -32,11 +32,12 @@ def signup():
     return Merchant.signup(email,password,name)
 
 @app.route("/merchant/login",methods=["POST"])
-@cross_origin()
+@cross_origin(supports_credentials=True)
 def login():
     request_sent=request.get_json()
     email=request_sent['email']
     password=request_sent['password']
+
     return Merchant.login(email,password)
 
 @app.route('/merchant',methods=['POST'])

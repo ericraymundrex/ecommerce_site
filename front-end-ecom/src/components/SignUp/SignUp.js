@@ -15,6 +15,9 @@ const SignUp = () =>{
             
         });
       console.log(message)
+      setEmail('')
+      setPassword('')
+      setName('')
     }
     const emailChangeHandler = (event) => {
       setEmail(event.target.value)
