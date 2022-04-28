@@ -7,8 +7,9 @@
     text-rendering: optimizeLegibility;
     -moz-osx-font-smoothing: grayscale;
 }
-body{
-    padding-top: 7rem ;
+
+.Login{
+    padding-top: 7rem;
 }
 
 .container{

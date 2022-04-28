@@ -1,0 +1,6 @@
+.active{
+    border-bottom: 3px solid white;
+    color: white;
+    font-size: 120%;
+    font-weight: bold;
+}

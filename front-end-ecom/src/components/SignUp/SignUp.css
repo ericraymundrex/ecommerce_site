@@ -7,8 +7,12 @@ body {
     text-rendering: optimizeLegibility;
     -moz-osx-font-smoothing: grayscale;
     overflow: auto;
-    padding-top: 7rem ;
 }
+
+.SignUp{
+    padding-top: 7rem;
+}
+
 
 .container{
     max-width: 35rem;

@@ -33,7 +33,7 @@ const SignUp = () =>{
     }
     return(
         <Fragment>
-        <form onSubmit={loginHandler}>
+        <form onSubmit={loginHandler} className="SignUp">
         <h3>Sign Up Page</h3>
             <div className="container">
 
