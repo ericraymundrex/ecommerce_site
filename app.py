@@ -1,11 +1,15 @@
 from Model import Products, Merchant as Merchant_model,Users,Purchase,db,app
+from Merchant import Merchant
 from flask import request, jsonify
 import bcrypt
 import jwt
 import datetime
 from functools import wraps
-
-
+from sqlalchemy import select
+from flask_cors import cross_origin
+#--------------------------------------------------------------------------------------------------------------------
+#------------------------------------------------------------ MERCHANT-----------------------------------------------
+#--------------------------------------------------------------------------------------------------------------------
 def token_required_merchant(f):
     @wraps(f)
     def decorated(*args, **kwargs):
@@ -18,97 +22,34 @@ def token_required_merchant(f):
 
     return decorated
 
-class Merchant:
-
-    def addItem(id,name,qty,cat,price,des,merchant):
-        merchant_session=db.session.query(Merchant_model.merchant_id).filter_by(merchant_name=merchant.lower())
-        print(merchant_session)
-        if id != '':
-            updateItem = Products.query.get(id)
-            updateItem.product_price=price            
-            updateItem.product_name=name
-            updateItem.product_available_qty=qty
-            updateItem.product_category=cat
-            updateItem.product_description=des
-            updateItem.merchants=merchant_session
-            db.session.commit()
-
-            return "SuccessFully Updated"
-        # .update(product_name=name,product_category=cat,product_available_qty=qty,product_price=price ,product_description=des)
-
-        else:
-            newitem = Products(product_name=name,product_category=cat,product_available_qty=qty,product_price=price,product_description=des,merchants=merchant_session)
-            db.session.add(newitem)
-            db.session.commit()
-            return "successfully added"
-
-
-    def deleteItem(id):
-        Products.query.filter_by(product_id=id).delete()
-        db.session.commit()
-        return {"message":"Deleted"}
-
-    def ListItem():
-        pass
-
-    def signup(email,password,name):
-        exist=db.session.query(Merchant_model.merchant_id).filter_by(merchant_email=email.lower()).first() is not None
-        if exist:
-            return {"message":"There is a user exist"}
-        else:
-            # print(email,password)
-            salt = bcrypt.gensalt()
-            hash = bcrypt.hashpw(password.encode('utf-8'), salt)
-
-            try:
-                new_merchant=Merchant_model(merchant_email=email,hash=hash,salt=salt,merchant_name=name)
-                db.session.add(new_merchant)
-                db.session.commit()
-            except:
-                return {"message":"Error in Database"}
-            return {"message":"Merchant successfully created"}
-    
-    def login(email,password):
-        try:
-            data=Merchant_model.query.filter_by(merchant_email=email.lower()).first()
-        except:
-            return {"message":"There is a problem in Database connection"}
-        email=data.merchant_email
-        name=data.merchant_name
-        hash=data.hash
-        salt=data.salt
-        hashed = bcrypt.hashpw(password.encode('utf-8'), salt)
-        if (hashed == hash):
-            token = jwt.encode({"email": email,"name":name, "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=30)},app.config['SECRET_KEY'])
-            return jsonify({"token":token})
-        else:
-            jsonify({"message":"Login is not a successful attempt"})
-
-
-
 @app.route("/merchant/signup",methods=["POST"])
+@cross_origin(supports_credentials=True)
 def signup():
-    email=request.form['email']
-    password=request.form['password']
-    name=request.form['name']
+    request_sent=request.get_json()
+    email=request_sent["email"]
+    password=request_sent['password']
+    name=request_sent['name']
     return Merchant.signup(email,password,name)
 
 @app.route("/merchant/login",methods=["POST"])
+@cross_origin()
 def login():
-    email=request.form['email']
-    password=request.form['password']
+    request_sent=request.get_json()
+    email=request_sent['email']
+    password=request_sent['password']
     return Merchant.login(email,password)
 
 @app.route('/merchant',methods=['POST'])
 @token_required_merchant
 def root():
+    request_sent=request.get_json()
     token = request.headers.get("token")
-    id = request.form['id']
-    name = request.form['name']
-    qty = int(request.form['qty'])
-    cat = request.form['cat']
-    des = request.form['des']
-    price = int(request.form['price'])
+    id = request_sent['id']
+    name = request_sent['name']
+    qty = int(request_sent['qty'])
+    cat = request_sent['cat']
+    des = request_sent['des']
+    price = int(request_sent['price'])
     merchant=jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
     print(merchant)
     return Merchant.addItem(id,name,qty,cat,price,des,merchant['name'])
@@ -118,10 +59,20 @@ def root():
 def delete(id):
     return Merchant.deleteItem(id)
 #--------------------------------------------------------------------------------------------------------------------
+#------------------------------------------------------------ USER---------------------------------------------------
 #--------------------------------------------------------------------------------------------------------------------
-#--------------------------------------------------------------------------------------------------------------------
-#--------------------------------------------------------------------------------------------------------------------
-#--------------------------------------------------------------------------------------------------------------------
+
+def token_required_user(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = request.headers.get("token")
+        try:
+            jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
+        except:
+            return jsonify({"message": "Token is invalid or missing"}), 403
+        return f(*args, **kwargs)
+
+    return decorated
 class User:
 
     def signup(email,password):
@@ -159,18 +110,25 @@ class User:
         else:
             jsonify({"message":"Login is not a successful attempt"})
     
-    def purchase(product_id,entered_number_of_products,user_id,inCart,date,status):
+    def purchase(product_id,entered_number_of_products,user_id,inCart,status):
 
-        product_available=db.session.query(Products.available_qty).filter_by(product_id=product_id).first() is not None
+        user_session=db.session.query(Users.user_email).filter_by(user_email=user_id.lower())
+        product_session=db.session.query(Products.product_id).filter_by(product_id=product_id)
+# stmt = select(user_table).where(user_table.c.name == 'spongebob')
+        product_available=select(Products).where(Products.product_id==product_id)
+        print(product_available)
+        print(entered_number_of_products)
         if product_available is None:
             return {"message":"product is is wrong"}
-        elif product_available <entered_number_of_products:
+        elif product_available <= entered_number_of_products:
             return {"message":"Available product is "+str(product_available)}
         else:
-            new_purchase=Purchase(product_id=product_id,user_id=user_id,inCart=inCart,date=date,status=status,quantity=entered_number_of_products)
+            new_purchase=Purchase(product_id=product_session,user_id=user_session,inCart=inCart,date=datetime.datetime.now(),status=status,quantity=entered_number_of_products)
             db.session.add(new_purchase)
             db.session.commit()
             return {"message":"product entered successfully"}
+
+
 @app.route("/user/signup",methods=["POST"])
 def signup_user():
     email=request.form['email']
@@ -183,15 +141,19 @@ def login_user():
     password=request.form['password'] 
     return User.login(email,password) 
 
+
 @app.route("/user/purchase",methods=["POST"])
+@token_required_user
 def purchase():
-    product_id=request.form['project_id']
+    token = request.headers.get("token")
+    product_id=request.form['product_id']
     quantity=request.form['quantity']
-    user_id=request.form['user_id']
+    # user_id=request.form['user_id']
     inCart=request.form['inCart']
-    date=request.form['date']
     status=request.form['status']
-    return User.purchase(product_id,quantity,user_id,inCart,date,status)
+    user_email=jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
+    print(user_email["email"])
+    return User.purchase(product_id,quantity,user_email["email"],inCart,status)
 #--------------------------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------------------------

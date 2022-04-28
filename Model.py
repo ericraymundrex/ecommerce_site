@@ -1,12 +1,21 @@
+import datetime
+
 from flask import Flask, redirect, render_template, request, session, url_for
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Integer, ForeignKey
+
 from sqlalchemy.orm import relationship
+from flask_cors import CORS
+from flask_restful import Api
 
 app=Flask(__name__)
+Api(app)
+CORS(app)
+
 app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///Ecommerce.sqlite3'
 app.config['SECRET_KEY'] = "Thisisasecertkey"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 db=SQLAlchemy(app)
 class Products(db.Model):
@@ -17,7 +26,7 @@ class Products(db.Model):
     product_description=db.Column(db.String(1000))
     product_price=db.Column(db.Integer)
 
-    # purchase=relationship('Purchase',backref="products")
+    purchases=relationship('Purchase',backref="products")
 
     merchants=db.Column(db.Integer,ForeignKey("merchant.id"))
 
@@ -54,7 +63,7 @@ class Users(db.Model):
     salt=db.Column(db.String(100))
     isdeleted=db.Column(db.String(1))
 
-    purchase_id=relationship('Purchase',backref="users") 
+    purchases=relationship('Purchase',backref="users") 
     
     def __init__(self,user_email,hash,salt):
         self.user_email=user_email
@@ -72,11 +81,11 @@ class Purchase(db.Model):
     date=db.Column(db.Date)
     status=db.Column(db.String(10))
     quantity=db.Column(db.Integer)
-    def __init__(self, product_id,user_id,inCart,date,status,quantity):
+    def __init__(self, product_id,user_id,inCart,status,quantity):
         self.product_id=product_id
         self.user_id=user_id
         self.inCart=inCart
-        self.date=date
+        self.date=datetime.datetime.now()
         self.status=status
         self.quantity=quantity
 
