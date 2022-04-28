@@ -1,8 +1,15 @@
 import { Fragment, useState } from "react"
 import axios from "axios"
 
+const config = {
+  headers:{
+    "token": localStorage.getItem('token')
+  }
+};
+
 const AddItem = () =>{
-    const categories = [{'id':1,'value':'Electronics'},
+    const categories = [{'id':0,'value':''},
+                        {'id':1,'value':'Electronics'},
                         {'id':2,'value':'Men Fashion'},
                         {'id':3,'value':'Women Fashion'},
                         {'id':4,'value':'Mobile Phone'},
@@ -45,7 +52,7 @@ const AddItem = () =>{
           des:description,
           price:price,
           
-      });
+      },config);
       console.log(message)
     }
     return(

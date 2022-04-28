@@ -45,6 +45,7 @@ def login():
 def root():
     request_sent=request.get_json()
     token = request.headers.get("token")
+    print(request_sent)
     id = request_sent['id']
     name = request_sent['name']
     qty = int(request_sent['qty'])
