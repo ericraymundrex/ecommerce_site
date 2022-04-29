@@ -1,0 +1,17 @@
+.active{
+    border-bottom: 3px solid white;
+    color: white;
+    font-size: 120%;
+    font-weight: bold;
+}
+
+.brand{
+    font-family: 'Times New Roman', Times, serif;
+    margin-left: 100px;
+    color: whitesmoke;
+    font-size: 20px;
+}
+
+.nav{
+    background-color:#22577E ;
+}

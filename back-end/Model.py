@@ -25,6 +25,7 @@ class Products(db.Model):
     product_available_qty=db.Column(db.Integer)
     product_description=db.Column(db.String(1000))
     product_price=db.Column(db.Integer)
+    product_rating=db.Column(db.Float)
 
     purchases=relationship('Purchase',backref="products")
 

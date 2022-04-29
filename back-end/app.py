@@ -163,8 +163,12 @@ def purchase():
 #--------------------------------------------------------------------------------------------------------------------
 
 class Page():
-    def home():
-        return {"message":"home page"}
+    def home(page):
+        all_products=db.session.query(Products.product_id,Products.product_name,Products.product_price,Products.product_description, Products.product_category, Products.product_available_qty).all()
+        products=[]
+        for p in all_products:
+            products.append({"name":p.product_name,"id":p.product_id,"price":p.product_price,"description":p.product_description,"product_category":p.product_category,"product_available_qty":p.product_available_qty})
+        return {"data":products}
     
     def sections(shopby,pricerange_higher_limit,pricerange_lower_limit,brandname):
         # filter by sections -> routes
@@ -174,6 +178,10 @@ class Page():
         for result in results:
             arr.append(result)
         return {"data":arr}
-        
+
+@app.route("/home",methods=["GET"])
+@cross_origin(supports_credentials=True)
+def home_page():
+    return Page.home(1)
 if __name__ == "__main__":
     app.run(debug=True,port=5000)
