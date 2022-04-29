@@ -25,7 +25,8 @@ function App() {
       </Routes> */}
       <Routes>
         <Route path="/" element={<Main />} />
-        <Route path="/merchant" element={<Login />} />
+        <Route path="/merchant" element={localData?<AddItem/>:<div><Login /> <SignUp/></div>} />
+
       </Routes>
       
     </Fragment>

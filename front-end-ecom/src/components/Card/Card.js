@@ -14,7 +14,7 @@ const Card = () =>{
     },[])
 
     const renderPosts=Object.values(posts).map(post=>{
-        
+        console.log(post)
         return <div className="Element"
                     style={{width:'30%',marginBottom:'20px'}}
                     key={post.id}
@@ -32,8 +32,9 @@ const Card = () =>{
 
             <div className="Row">
                 {renderPosts}
+                
             </div>
-            <p>Top For You</p>
+            <p>Top Brands For You</p>
             <div className="Row">
                 <div className="Element">
                     <p>fasf</p>

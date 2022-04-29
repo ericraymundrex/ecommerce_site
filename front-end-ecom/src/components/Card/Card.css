@@ -16,6 +16,7 @@ width: 100%
 
 .Row{
     display: flex;
+    width: 100%;
     justify-items: space-between;
     flex-wrap: wrap;
 }
