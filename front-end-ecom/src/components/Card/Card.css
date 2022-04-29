@@ -5,6 +5,7 @@ width: 100%
 .Card{
     /* margin: 2.2rem 1rem; */
     display: flex;
+    justify-content: space-between;
     flex-wrap: wrap;
     width: 100%;
 
@@ -27,9 +28,42 @@ width: 100%
 }
 
 .Element{
-    background-color: blanchedalmond;
+    /* background-color: blanchedalmond; */
     margin: 1.2rem 0.5rem;
     width: 18.4%;
     min-width: 12rem;
     height: 20rem;
+    position: relative;
+}
+
+.Card-body{
+    padding: 0.5rem 0;
+    text-align: center;
+}
+
+.Card-body img{
+    width: 60%;
+    min-height: 12rem;
+    /* height: 10%; */
+}
+
+.Card-body p{
+    font-weight: bold;
+    /* padding: 0.4rem; */
+}
+
+.button-container{
+    display: flex;
+    position: absolute;
+    justify-content: space-around;
+    bottom: 0;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    width: 100%;
+}
+.button-container input{
+    background-color:rgb(66, 177, 192);
+    font-weight: bold;
+    color: white;
+    border-radius: 0.5rem;
 }

@@ -8,6 +8,7 @@ import Login from './components/Login/Login';
 import SignUp from './components/SignUp/SignUp';
 import AddItem from "./components/Merchant/Add";
 import Main from "./components/Main/Main";
+import Cart from "./components/Cart/Cart";
 
 
 
@@ -26,6 +27,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Main />} />
         <Route path="/merchant" element={localData?<AddItem/>:<div><Login /> <SignUp/></div>} />
+        <Route path="/cart" element={<Cart/>} />
 
       </Routes>
       
