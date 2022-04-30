@@ -1,6 +1,6 @@
 from Model import Products, Merchant as Merchant_model,Users,Purchase,db,app
 from Merchant import Merchant
-from flask import request, jsonify
+from flask import request, jsonify, make_response
 import bcrypt
 import jwt
 import datetime
@@ -22,17 +22,25 @@ def token_required_merchant(f):
 
     return decorated
 
-@app.route("/merchant/signup",methods=["POST"])
-@cross_origin(supports_credentials=True)
+def _build_cors_preflight_response():
+    response = make_response()
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    response.headers.add("Access-Control-Allow-Headers", "*")
+    response.headers.add("Access-Control-Allow-Methods", "*")
+    return response
+
+@app.route("/merchant/signup",methods=["POST","OPTIONS"])
+# @cross_origin(supports_credentials=True)
 def signup():
-    request_sent=request.get_json()
-    email=request_sent["email"]
-    password=request_sent['password']
-    name=request_sent['name']
-    return Merchant.signup(email,password,name)
+    if request.method=="POST":
+        request_sent=request.get_json()
+        email=request_sent["email"]
+        password=request_sent['password']
+        name=request_sent['name']
+        return Merchant.signup(email,password,name)
 
 @app.route("/merchant/login",methods=["POST"])
-@cross_origin(supports_credentials=True)
+# @cross_origin(supports_credentials=True)
 def login():
     request_sent=request.get_json()
     email=request_sent['email']
@@ -177,11 +185,26 @@ class Page():
         results=db.session.query(Products).filter(Products.product_price<=pricerange_higher_limit & Products.product_price >pricerange_higher_limit & Products.product_category== shopby)
         for result in results:
             arr.append(result)
+
         return {"data":arr}
 
-@app.route("/home",methods=["GET"])
-@cross_origin(supports_credentials=True)
+@app.route("/home",methods=["GET","OPTIONS"])
+# @cross_origin(supports_credentials=True)
 def home_page():
-    return Page.home(1)
+    print(request.method)
+    # if request.method=="OPTIONS":
+    #     return _build_cors_preflight_response()
+    if request.method=="GET":
+        response = jsonify(Page.home(1))
+    # response = Page.home(1)
+        # response.headers.add("Access-Control-Allow-Origin", "*")
+        # response.headers.add("Access-Control-Allow-Headers", "*")
+        # response.headers.add("Access-Control-Allow-Methods", "*")
+    # return jsonify(response)
+
+
+    # Enable Access-Control-Allow-Origin
+    # response.headers.add("Access-Control-Allow-Origin", "*")
+    return response
 if __name__ == "__main__":
     app.run(debug=True,port=5000)

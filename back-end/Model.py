@@ -11,11 +11,14 @@ from flask_restful import Api
 app=Flask(__name__)
 Api(app)
 CORS(app)
-
+cors=CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///Ecommerce.sqlite3'
 app.config['SECRET_KEY'] = "Thisisasecertkey"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-app.config['CORS_HEADERS'] = 'Content-Type'
+app.config['CORS_HEADER']='Content-Type'
+app.config["Access-Control-Allow-Origin"]="*"
+app.config["Strict-Access-Control-Allow-Origin"]="*"
+
 
 db=SQLAlchemy(app)
 class Products(db.Model):
@@ -38,7 +41,7 @@ class Products(db.Model):
         self.product_available_qty = product_available_qty
         self.product_description = product_description
         self.merchants=merchants
-
+        self.product_rating=0
 
 
 class Merchant(db.Model):
