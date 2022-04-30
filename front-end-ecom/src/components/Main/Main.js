@@ -2,6 +2,7 @@ import "./Main.css"
 import Header from "../Header/Header";
 import { Fragment } from "react"
 import Card from "../Card/Card"
+import VerticalHeader from "../VerticalHeader/VerticalHeader";
 
 const Main = () =>{
     const categories = [{'id':1,'value':'Electronics'},
@@ -16,30 +17,7 @@ const Main = () =>{
 <Fragment>
     <Header/>
     <div className="Main">
-        <div className="Main-vertical">
-            <p>Users</p>
-            <div className="vertical-menu">
-                <a href="/" >Home</a>
-                <a href="/">Link 1</a>
-                <a href="/">Link 2</a>
-                <a href="/">Link 3</a>
-                <a href="/">Link 4</a>
-                <a href="/">Link 5</a>
-            </div>
-            <p>Categories</p>
-            <div className="vertical-menu">
-                {categories.map((item)=>(
-                    <a key={item.id} href={item.value}>{item.value}</a>
-                ))}
-            </div>
-            <p>Filters</p>
-            <div className="vertical-menu">
-            <a href="/" >Home</a>
-                <a href="/">Link 1</a>
-                <a href="/">Link 2</a>
-                <a href="/">Link 3</a>
-            </div>
-        </div>
+        <VerticalHeader categories={categories}/>
         <Card/>
     </div>
 

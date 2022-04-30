@@ -8,9 +8,11 @@ const Login = () => {
     
     const loginHandler = async(event) =>{
       event.preventDefault();
-      let token=await axios.post("http://localhost:5000/merchant/login",{
+      let token=await axios.post("/merchant/login",{
             email:email,
             password:password
+        },{
+          headers:{'Content-Type': 'application/json'}
         });
         console.log(token.data.token)
         localStorage.setItem("token",token.data.token)

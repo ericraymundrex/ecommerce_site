@@ -1,13 +1,26 @@
 import "./Card.css"
 import { useState,useEffect } from "react";
 import axios from "axios";
+import { Route, Routes } from "react-router-dom";
+import DetailView from "../DetailView/DetailView"
 // import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 
 const Card = () =>{
+    const arr= [
+        {
+            id:1,
+            name:"dnndjn",
+            price:1000
+        },
+        {
+            id:2,
+            name:"wwknknwkw",
+            price:2000
+        }]
     const [posts,setPosts]=useState({});
 
     const fetchPost=async()=>{
-        const res=await axios.get("http://localhost:5000/home");
+        const res=await axios.get("/home");
         console.log("res : "+res )
         setPosts(res.data.data)
     }
@@ -24,6 +37,7 @@ const Card = () =>{
                             <a href={`/${post.name}`}><img src="https://2.img-dpreview.com/files/p/E~C1000x0S4000x4000T1200x1200~articles/3925134721/0266554465.jpeg"/></a>
                             <p>Rs : {post.price} /-</p>
                             <input type="button" value="Add to Cart"/>
+                            
                     </div>
                     
             </div>
@@ -74,6 +88,7 @@ const Card = () =>{
                             <img src="https://2.img-dpreview.com/files/p/E~C1000x0S4000x4000T1200x1200~articles/3925134721/0266554465.jpeg"/>
                             <p>Rs : 250 /-</p>
                             <input type="button" value="Add to Cart"/>
+                            
                     </div>
                 </div>
                 
@@ -110,7 +125,14 @@ const Card = () =>{
                     </div>
                 </div>
             </div>
+            <Routes>
+                <Route path="/dnndjn" element={<DetailView/>} />
+            </Routes>
+
+        
         </div>
+
+        
     )
 }
 

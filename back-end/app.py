@@ -183,5 +183,6 @@ class Page():
 @cross_origin(supports_credentials=True)
 def home_page():
     return Page.home(1)
+
 if __name__ == "__main__":
     app.run(debug=True,port=5000)

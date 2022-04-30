@@ -1,9 +1,3 @@
-  .Main-vertical{
-      display:flex;
-      flex-flow: column;
-      padding-left: 0.3rem;
-      width: 15rem;
-  }
 
   .Main{
     display: flex;
@@ -12,34 +6,3 @@
     max-height: 500rem;
     /* margin-left: 100px; */
   }
-  
-  .vertical-menu {
-    max-width: 200px;
-    height: 250px;
-    overflow-y: auto;
-    border-radius: 0.65rem;
-  }
-
-  .Main-vertical p{
-    font-weight: bold;
-    font-size: 110%;
-    margin: 0.25rem;
-  }
-  
-  .vertical-menu a {
-    background-color: #eee;
-    color: black;
-    display: block;
-    padding: 12px;
-    text-decoration: none;
-  }
-  
-  .vertical-menu a:hover {
-    background-color: #ccc;
-  }
-  
-  .vertical-menu a.active {
-    background-color: #04AA6D;
-    color: white;
-  }
-  
