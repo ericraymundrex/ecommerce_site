@@ -34,20 +34,23 @@ const SignUp = () =>{
         setName(event.target.value)
         console.log(name)
     }
+    function capitalizeFirstLetter(string) {
+      return string.charAt(0).toUpperCase() + string.slice(1);
+    }
     return(
         <Fragment>
         <form onSubmit={loginHandler} className="SignUp">
-        <h3>Sign Up Page</h3>
+        <h3>Sign Up, and happy shopping</h3>
             <div className="container">
 
         <div className="mb-3 mt-3">
-          <label htmlFor="name">Company Name</label>
+          <label htmlFor="name">{capitalizeFirstLetter(usertype)} Name</label>
           <input
             type="text"
             name="name"
             id="name"
             className="form-control"
-            placeholder="Enter Your Company Name"
+            placeholder={`Enter Your ${capitalizeFirstLetter(usertype)} Name`}
             onChange={nameChangeHandler}
           />
         </div>

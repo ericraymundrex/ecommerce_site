@@ -15,8 +15,13 @@ const Login = () => {
         },{
           headers:{'Content-Type': 'application/json'}
         });
+
         console.log(token.data.token)
         localStorage.setItem("token",token.data.token)
+        localStorage.setItem("userType",token.data.email)
+        localStorage.setItem("email",token.data.userType)
+        localStorage.setItem("name",token.data.name)
+        
         setEmail('')
         setPassword('')
     }
@@ -31,11 +36,11 @@ const Login = () => {
 
         <Fragment>
         <form onSubmit={loginHandler} className="Login">
-        <h3>Login Page</h3>
+        <h3>Login Page, welcome back</h3>
             <div className="container">
             
         <div className="mb-3 mt-3">
-          <label htmlFor="email">Email</label>
+          <label htmlFor="email" className="text">Email</label>
           <input
             type="email"
             name="email"
@@ -43,6 +48,7 @@ const Login = () => {
             className="form-control"
             placeholder="Enter Email"
             onChange={emailChangeHandler}
+            value={email}
           />
         </div>
         <div className="mb-3 mt-3">
@@ -54,6 +60,7 @@ const Login = () => {
             placeholder="Enter Password"
             className="form-control"
             onChange={passwordChangeHandler}
+            value={password}
           />
         </div>
         <div className="btn-container">

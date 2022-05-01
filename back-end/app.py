@@ -117,7 +117,7 @@ class User:
 
         if (hashed == hash):
             token = jwt.encode({"email": email, "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=30)},app.config['SECRET_KEY'])
-            return jsonify({"token":token})
+            return jsonify({"token":token,"userType":"customer","email":email,"name":data.name})
         else:
             jsonify({"message":"Login is not a successful attempt"})
     #product_id,user_id,inCart,status,quantity):

@@ -79,6 +79,6 @@ class Merchant:
         hashed = bcrypt.hashpw(password.encode('utf-8'), salt)
         if (hashed == hash):
             token = jwt.encode({"email": email,"name":name, "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=30)},app.config['SECRET_KEY'])
-            return jsonify({"token":token})
+            return jsonify({"token":token,"userType":"merchant","email":email,"name":name})
         else:
             jsonify({"message":"Login is not a successful attempt"})

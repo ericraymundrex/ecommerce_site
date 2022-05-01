@@ -12,7 +12,7 @@ const Header = () => {
     <a className="navbar-brand brand" href="/">ECOM SITE</a>
     <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Search"></input>
     <button type="submit" class="btn btn-primary">search</button>
-
+    <a className="navbar-brand cart" href="/auth/user">Login/Signup</a>
     <a className="navbar-brand cart" href="/">Cart</a>
   {/* <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span className="navbar-toggler-icon"></span>

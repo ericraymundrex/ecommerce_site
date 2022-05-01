@@ -1,5 +1,4 @@
 import "./Main.css"
-import Header from "../Header/Header";
 import { Fragment } from "react"
 import Card from "../Card/Card"
 import VerticalHeader from "../VerticalHeader/VerticalHeader";
@@ -15,7 +14,6 @@ const Main = () =>{
     return(
 
 <Fragment>
-    <Header/>
     <div className="Main">
         <VerticalHeader categories={categories}/>
         <Card/>

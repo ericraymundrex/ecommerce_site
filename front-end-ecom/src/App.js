@@ -3,14 +3,14 @@ import { Routes, Route } from "react-router-dom";
 import { Fragment} from 'react';
 
 import './App.css';
-
+import Header from "./components/Header/Header";
 import Login from './components/Login/Login';
 import SignUp from './components/SignUp/SignUp';
 import AddItem from "./components/Merchant/Add";
 import Main from "./components/Main/Main";
 import Cart from "./components/Cart/Cart";
 import DetailView from "./components/DetailView/DetailView";
-
+import AuthPage from "./components/AuthPage/AuthPage";
 
 
 function App() {
@@ -37,11 +37,13 @@ function App() {
   //       fetchPost()
   //   },[])
   return (
+    
     <Fragment>
+      <Header />
       <Routes>
         <Route path="/" element={<Main />} />
         <Route path="/:id" element={<DetailView categories={categories}/>}/>
-        <Route path="/auth/:usertype" element={localData?<AddItem/>:<div><Login /> <SignUp/></div>} />
+        <Route path="/auth/:usertype" element={localData?<AddItem/>:<AuthPage />} />
         <Route path="/cart" element={<Cart/>}/>        
       </Routes>
       
