@@ -8,7 +8,7 @@ const Header = () => {
   const {CartItem} = useSelector((state) => state)
   const [modalOpen, setModalOpen] = useState(false);
 // const params = "";
-  
+  const name=localStorage.getItem("name")
   return(
     <Fragment>
     <nav className="navbar nav navbar-expand-lg pl-2">
@@ -18,7 +18,7 @@ const Header = () => {
     <div className="cart-icon">
     <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Search"></input> <button type="submit" class="btn btn-primary">Submit</button>
 
-    <a className="navbar-brand brand" href="/auth/user">LOGIN/SIGNUP</a>
+    {name?name.split(" ")[0]:<a className="navbar-brand" href="/auth/user">LOGIN/SIGNUP</a>}
       <img onClick={() => {
           setModalOpen(true);
         }}

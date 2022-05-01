@@ -37,9 +37,9 @@ class Merchant:
         return {"message":"Deleted"}
 
     def ListItem(merchant):
-        result=db.session.query(Merchant_model,Products).join(Products).all()
+        result=db.session.query(Products).join(Merchant_model).filter(Merchant_model.merchant_name==merchant["name"]).all()
         data=[]
-        for merchant,product in result:
+        for product in result:
             data.append({
                 "product_id":product.product_id,
                 "product_name":product.product_name,
