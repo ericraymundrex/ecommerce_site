@@ -13,6 +13,7 @@ import Footer from "./components/Footer/Footer";
 
 function App() {
 
+
   //to be conmeted
   const categories = [{'id':1,'value':'Electronics'},
                         {'id':2,'value':'Men Fashion'},
@@ -34,6 +35,7 @@ function App() {
   //   useEffect(()=>{
   //       fetchPost()
   //   },[])
+  
   return (
     
     <Fragment>

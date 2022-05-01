@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import "./Cart.css"
 
 const Cart = ({setOpenModal}) =>{
-    const arr_id = []
     const {CartItem} = useSelector((state) => state)
     console.log(CartItem)
 
