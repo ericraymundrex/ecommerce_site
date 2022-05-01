@@ -64,7 +64,7 @@ def root():
         return Merchant.addItem(id,name,qty,cat,price,des,merchant['name'],product_rating)
     if request.method=="GET":
         return Merchant.ListItem(merchant)
-        pass
+        
 
 @app.route('/merchant/<int:id>',methods=["DELETE"])
 @token_required_merchant

@@ -24,6 +24,25 @@
     width: 63%;
 }
 
+.DetailView-body input{
+    margin: 0.5rem 1rem;
+}
+
+.DetailView-body span{
+    font-weight: bold;
+    font-size: 110%;
+}
+
+.button-container{
+    width: 50%;
+    display: flex;
+    justify-content: space-evenly;
+}
+
 .description-body{
     padding: 0 3rem;
+}
+
+.warning{
+    color: red;
 }

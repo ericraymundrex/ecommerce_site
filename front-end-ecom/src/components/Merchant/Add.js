@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react"
+import { Fragment, useState, useEffect } from "react"
 import axios from "axios"
 
 const config = {
@@ -42,6 +42,17 @@ const AddItem = () =>{
       setDes(event.target.value)
 
     }
+
+    const [data,setData] = useState({})
+    const fetchData=async()=>{
+      const res=await axios.get("/merchant",config);
+      console.log(res.data.data)
+      setData(res.data.data)
+  }
+  useEffect(()=>{
+      fetchData()
+  },[])
+
     
     const submitHandler = async(event)=>{
       event.preventDefault();
@@ -54,7 +65,6 @@ const AddItem = () =>{
           price:price,
           
       },config);
-      console.log(message)
     }
     return(
         <Fragment>

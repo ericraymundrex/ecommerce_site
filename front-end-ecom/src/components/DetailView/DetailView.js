@@ -51,9 +51,9 @@ const DetailView = (props) =>{
                     <img src="https://www.tompetty.com/sites/g/files/g2000007521/f/Sample-image10-highres.jpg" alt="This is a img"/>
                     <div className="DetailView-body">
                             <h3>{posts.name}</h3>
-                            <p>Description : </p>
+                            <p><span>Description : </span></p>
                             {newDes.map((des)=> <li className="description-body">{des}</li>)}
-                            Quantity : 
+                            <span>Quantity : </span>
                             {posts.product_available_qty > 5 ?
                             <select>
                                 <option value="1">1</option>
@@ -63,11 +63,14 @@ const DetailView = (props) =>{
                                 <option value="5">5</option>
                             </select> : <select>{createElement(n)}</select>}
                             <br/>
-                            <p>Rs. {posts.price} /-</p>
-
-                            <input type="Submit" value={"Add to cart"} />
-                            <a href={buy_now}>Buy now</a> 
+                            <p><span>Rs : </span>{posts.price} /-</p>
+                            <div className="button-container">
+                                <input type="Submit" value={"Add to cart"} />
+                                <input type="Submit" value={"Buy"} />
+                            </div>
+                            <p className="warning"> * Only <span>{n}</span> left in stock</p>
                     </div>
+                    
 
                 </div>
             </div> 
