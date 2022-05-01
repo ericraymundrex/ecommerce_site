@@ -5,7 +5,7 @@ const initialState = {
 };
 
 const crudReducer = (state = initialState, action) => {
-    if (action.type == "CartItem") {
+    if (action.type === "CartItem") {
       return {
         ...state,
         CartItem: [...state.CartItem, action.value],

@@ -162,13 +162,16 @@ def purchase():
     user_email=jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])    
     if request.method=="POST":
         request_sent=request.get_json()
-        product_id=request_sent['product_id']
-        quantity=request_sent['quantity']
-        status=request_sent['status']
-
-    
+        # product_id=request_sent['product_id']
+        # quantity=request_sent['quantity']
+        # status=request_sent['status']
+        data=request_sent['data']
+        print(data)
         print(user_email["email"])
-        return User.purchase(product_id,quantity,user_email["email"],status)
+        for data in data:
+            print(data)
+            User.purchase(data["id"],1,user_email["email"],"booked")
+        return {"message":"success"}
 
     if request.method=="GET":
         return User.purchase_history(user_email)
