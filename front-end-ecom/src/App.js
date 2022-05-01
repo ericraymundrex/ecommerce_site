@@ -12,6 +12,7 @@ import AuthPage from "./components/AuthPage/AuthPage";
 
 function App() {
 
+
   //to be conmeted
   const categories = [{'id':1,'value':'Electronics'},
                         {'id':2,'value':'Men Fashion'},

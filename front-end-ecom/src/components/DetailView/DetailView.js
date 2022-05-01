@@ -6,7 +6,7 @@ import VerticalHeader from "../VerticalHeader/VerticalHeader";
 import { useParams } from "react-router-dom";
 
 const DetailView = (props) =>{
-    
+    const [newDes,setnewDes] = useState([])
     let {id}=useParams()
     let buy_now=`/${id}/checkout`
     const [posts,setPosts]=useState({});
@@ -15,11 +15,13 @@ const DetailView = (props) =>{
     },[])
     const fetchPost=async()=>{
         const res=await axios.get("/product/"+id);
-        console.log("res : "+res.data.data[0] )
+        console.log(res.data.data[0])
         setPosts(res.data.data[0])
+        setnewDes(res.data.data[0].description.split('|'))
     }
 
-    // const renderPosts=Object.values(posts).map((post)=>{
+    const n = posts.product_available_qty
+        // const renderPosts=Object.values(posts).map((post)=>{
     //     return <div className="Element"
     //                 key={post.id}
     //                 >
@@ -32,6 +34,13 @@ const DetailView = (props) =>{
     //         </div>
     // })
 
+    function createElement(n){
+        var elements = []
+        for(var i=1;i<n+1;i++){
+            elements.push(<option value={i}>{i}</option>)
+        }
+        return elements
+    }
 
     return (
         <Fragment>
@@ -42,8 +51,18 @@ const DetailView = (props) =>{
                     <img src="https://www.tompetty.com/sites/g/files/g2000007521/f/Sample-image10-highres.jpg" alt="This is a img"/>
                     <div className="DetailView-body">
                             <h3>{posts.name}</h3>
-                            <p>Description : {posts.description}</p>
-                            <p> Qty : {posts.qty}</p>
+                            <p>Description : </p>
+                            {newDes.map((des)=> <li className="description-body">{des}</li>)}
+                            Quantity : 
+                            {posts.product_available_qty > 5 ?
+                            <select>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select> : <select>{createElement(n)}</select>}
+                            <br/>
                             <p>Rs. {posts.price} /-</p>
 
                             <input type="Submit" value={"Add to cart"} />

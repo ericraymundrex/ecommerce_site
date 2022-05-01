@@ -36,7 +36,6 @@ const Card = () =>{
 
     const fetchPost=async()=>{
         const res=await axios.get("/home");
-        console.log("res : "+res )
         setPosts(res.data.data)
     }
     useEffect(()=>{
@@ -48,8 +47,6 @@ const Card = () =>{
                      
             
     })
-
-    // console.log(cartItems.length)
     return(
         <div className="Card">
             <p>Trending</p>
