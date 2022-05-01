@@ -1,0 +1,23 @@
+.active{
+    border-bottom: 3px solid white;
+    color: white;
+    font-size: 120%;
+    font-weight: bold;
+}
+
+.brand,.cart{
+    font-family: 'Times New Roman', Times, serif;
+    margin-left: 100px;
+    color: whitesmoke;
+    font-size: 20px;
+}
+
+.cart{
+    margin: 0 100px 0 1rem;
+}
+
+.nav{
+    background-color:#22577E ;
+    display: flex;
+    justify-content: space-between;
+}
