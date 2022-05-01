@@ -1,0 +1,14 @@
+
+.AddItem{
+    position: relative;
+}
+
+.ShowList{
+    position: relative;
+    margin-top: 10rem;
+    border: 2px solid black;
+}
+
+.ShowList thead{
+    font-weight: bold;
+}

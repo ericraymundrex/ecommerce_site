@@ -1,5 +1,6 @@
 import { Fragment, useState, useEffect } from "react"
 import axios from "axios"
+import "./ShowList.css"
 
 const config = {
   headers:{
@@ -52,6 +53,7 @@ const AddItem = () =>{
   useEffect(()=>{
       fetchData()
   },[])
+  console.log(data)
 
     
     const submitHandler = async(event)=>{
@@ -68,7 +70,7 @@ const AddItem = () =>{
     }
     return(
         <Fragment>
-            <form onSubmit={submitHandler} >
+            <form onSubmit={submitHandler} className="AddItem" >
         <h3>Add New Item Page</h3>
             <div className="container">
 
