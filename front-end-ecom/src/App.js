@@ -9,6 +9,7 @@ import Main from "./components/Main/Main";
 import Cart from "./components/Cart/Cart";
 import DetailView from "./components/DetailView/DetailView";
 import AuthPage from "./components/AuthPage/AuthPage";
+import CheckOut from "./components/CheckOut/CheckOut";
 
 function App() {
 
@@ -34,7 +35,8 @@ function App() {
         <Route path="/" element={<Main />} />
         <Route path="/:id" element={<DetailView categories={categories}/>}/>
         <Route path="/auth/:usertype" element={token? usertype==="merchant"?<AddItem />:<Navigate to="/"/> :<AuthPage/>} />
-        <Route path="/cart" element={<Cart/>}/>        
+        <Route path="/cart" element={<Cart/>}/>  
+        <Route path="/checkout" element={<CheckOut/>}/>      
       </Routes>
       {/* <Footer /> */}
     </Fragment>

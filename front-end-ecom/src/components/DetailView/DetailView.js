@@ -4,9 +4,14 @@ import { useState,useEffect } from "react";
 import axios from "axios";
 import VerticalHeader from "../VerticalHeader/VerticalHeader";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router";
+import { useDispatch } from "react-redux";
+
 
 const DetailView = (props) =>{
     const [newDes,setnewDes] = useState([])
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
     let {id}=useParams()
     let buy_now=`/${id}/checkout`
     const [posts,setPosts]=useState({});
@@ -21,18 +26,11 @@ const DetailView = (props) =>{
     }
 
     const n = posts.product_available_qty
-        // const renderPosts=Object.values(posts).map((post)=>{
-    //     return <div className="Element"
-    //                 key={post.id}
-    //                 >
-    //                  <div className="Card-body">
-    //                         <a href={`/${post.id}`}><img src="https://2.img-dpreview.com/files/p/E~C1000x0S4000x4000T1200x1200~articles/3925134721/0266554465.jpeg" alt="This is a img"/></a>
-    //                         <h5>{post.name.slice(0,15)}...</h5>
-    //                         <p>Rs : {post.price} /-</p>
-    //                         <input type="button" value="Add to Cart"/>       
-    //                 </div>
-    //         </div>
-    // })
+    
+    const buyHandler = (posts) =>{
+        dispatch({type:"CartItem", value: posts})
+        navigate('/checkout')
+    }
 
     function createElement(n){
         var elements = []
@@ -55,20 +53,17 @@ const DetailView = (props) =>{
                             {newDes.map((des)=> <li className="description-body">{des}</li>)}
                             <span>Quantity : </span>
                             {posts.product_available_qty > 5 ?
-                            <select>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                            </select> : <select>{createElement(n)}</select>}
+                            <select>{createElement(5)}</select> 
+                                : 
+                            <select>{createElement(n)}</select>}
                             <br/>
                             <p><span>Rs : </span>{posts.price} /-</p>
                             <div className="button-container">
                                 <input type="Submit" value={"Add to cart"} />
-                                <input type="Submit" value={"Buy"} />
+                                <input type="Submit" value={"Buy"} onClick={()=>buyHandler(posts)}/>
                             </div>
-                            <p className="warning"> * Only <span>{n}</span> left in stock</p>
+                            {posts.product_available_qty > 5 ? "" : 
+                            <p className="warning"> * Only <span>{n}</span> left in stock</p>}
                     </div>
                     
 

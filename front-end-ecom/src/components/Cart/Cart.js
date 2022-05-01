@@ -1,9 +1,11 @@
 import { Fragment } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router";
 import "./Cart.css"
 
 const Cart = ({setOpenModal}) =>{
     const {CartItem} = useSelector((state) => state)
+    const navigate = useNavigate()
     console.log(CartItem)
 
     const renderBody = Object.values(CartItem).map((item)=>{
@@ -47,7 +49,7 @@ const Cart = ({setOpenModal}) =>{
           >
             Cancel
           </button>
-          <button>Continue</button>
+          <button onClick={()=> navigate("/checkout")}>Continue</button>
         </div>
       </div>
     </div>
