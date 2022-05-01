@@ -40,21 +40,31 @@ def login():
 
     return Merchant.login(email,password)
 
-@app.route('/merchant',methods=['POST'])
+
+@app.route('/merchant',methods=['POST','GET'])
 @token_required_merchant
 def root():
-    request_sent=request.get_json()
+    
     token = request.headers.get("token")
-    print(request_sent)
-    id = request_sent['id']
-    name = request_sent['name']
-    qty = int(request_sent['qty'])
-    cat = request_sent['cat']
-    des = request_sent['des']
-    price = int(request_sent['price'])
     merchant=jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
-    print(merchant)
-    return Merchant.addItem(id,name,qty,cat,price,des,merchant['name'])
+    if request.method=="POST":
+        request_sent=request.get_json()
+        print(request_sent)
+        id = request_sent['id']
+        name = request_sent['name']
+        qty = int(request_sent['qty'])
+        cat = request_sent['cat']
+        des = request_sent['des']
+        price = int(request_sent['price'])
+        if id !='':
+            product_rating=request_sent['product_rating']
+        else:
+            product_rating=0
+        print(merchant)
+        return Merchant.addItem(id,name,qty,cat,price,des,merchant['name'],product_rating)
+    if request.method=="GET":
+        return Merchant.ListItem(merchant)
+        pass
 
 @app.route('/merchant/<int:id>',methods=["DELETE"])
 @token_required_merchant
@@ -76,8 +86,7 @@ def token_required_user(f):
 
     return decorated
 class User:
-
-    def signup(email,password):
+    def signup(email,password,name):
         exist=db.session.query(Users.user_id).filter_by(user_email=email).first() is not None
         print(exist)
         if exist:
@@ -88,7 +97,7 @@ class User:
             hash = bcrypt.hashpw(password.encode('utf-8'), salt)
 
             try:
-                new_user=Users(user_email=email,hash=hash,salt=salt)
+                new_user=Users(user_email=email,hash=hash,salt=salt,name=name)
                 db.session.add(new_user)
                 db.session.commit()
             except:
@@ -111,51 +120,59 @@ class User:
             return jsonify({"token":token})
         else:
             jsonify({"message":"Login is not a successful attempt"})
-    
-    def purchase(product_id,entered_number_of_products,user_id,inCart,status):
+    #product_id,user_id,inCart,status,quantity):
+    def purchase(product_id,entered_number_of_products,user_id,status):
+        print(str(product_id)+" "+str(user_id))
+        user_session=db.session.query(Users.user_id).filter_by(user_email=user_id.lower())
+        product_session=db.session.query(Products.product_id).filter_by(product_id=int(product_id))
+        print(str(user_session)+" "+str(product_session))
+        new_purchase=Purchase(product_id=product_session,user_id=user_session,status=status,quantity=entered_number_of_products)
+        db.session.add(new_purchase)
+        db.session.commit()
+        return {"message":"product entered successfully"}
 
-        user_session=db.session.query(Users.user_email).filter_by(user_email=user_id.lower())
-        product_session=db.session.query(Products.product_id).filter_by(product_id=product_id)
-# stmt = select(user_table).where(user_table.c.name == 'spongebob')
-        product_available=select(Products).where(Products.product_id==product_id)
-        print(product_available)
-        print(entered_number_of_products)
-        if product_available is None:
-            return {"message":"product is is wrong"}
-        elif product_available <= entered_number_of_products:
-            return {"message":"Available product is "+str(product_available)}
-        else:
-            new_purchase=Purchase(product_id=product_session,user_id=user_session,inCart=inCart,date=datetime.datetime.now(),status=status,quantity=entered_number_of_products)
-            db.session.add(new_purchase)
-            db.session.commit()
-            return {"message":"product entered successfully"}
-
+    def purchase_history(user_id):
+        # result=db.session.query(Purchase,Users).select_from(Users).join(Users).filter(Users.user_id==user_id).all()
+        # data=[]
+        # for purchase,user in result:
+        #     data.append(purchase)
+        # return jsonify({"data":data})  
+        pass     
 
 @app.route("/user/signup",methods=["POST"])
 def signup_user():
-    email=request.form['email']
-    password=request.form['password'] 
-    return User.signup(email,password)
+    request_sent=request.get_json()
+    email=request_sent['email']
+    password=request_sent['password']
+    name=request_sent['name'] 
+    return User.signup(email,password,name)
 
 @app.route("/user/login",methods=["POST"])
 def login_user():
-    email=request.form['email']
-    password=request.form['password'] 
+    request_sent=request.get_json()
+    email=request_sent['email']
+    password=request_sent['password'] 
     return User.login(email,password) 
 
 
-@app.route("/user/purchase",methods=["POST"])
+@app.route("/user/purchase",methods=["POST","GET"])
 @token_required_user
 def purchase():
     token = request.headers.get("token")
-    product_id=request.form['product_id']
-    quantity=request.form['quantity']
-    # user_id=request.form['user_id']
-    inCart=request.form['inCart']
-    status=request.form['status']
-    user_email=jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
-    print(user_email["email"])
-    return User.purchase(product_id,quantity,user_email["email"],inCart,status)
+    user_email=jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])    
+    if request.method=="POST":
+        request_sent=request.get_json()
+        product_id=request_sent['product_id']
+        quantity=request_sent['quantity']
+        status=request_sent['status']
+
+    
+        print(user_email["email"])
+        return User.purchase(product_id,quantity,user_email["email"],status)
+
+    if request.method=="GET":
+        return User.purchase_history(user_email)
+
 #--------------------------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------------------------
@@ -169,20 +186,32 @@ class Page():
         for p in all_products:
             products.append({"name":p.product_name,"id":p.product_id,"price":p.product_price,"description":p.product_description,"product_category":p.product_category,"product_available_qty":p.product_available_qty})
         return {"data":products}
-    
-    def sections(shopby,pricerange_higher_limit,pricerange_lower_limit,brandname):
-        # filter by sections -> routes
-        # params -> pricerange, brandname
-        arr=[]
-        results=db.session.query(Products).filter(Products.product_price<=pricerange_higher_limit & Products.product_price >pricerange_higher_limit & Products.product_category== shopby)
-        for result in results:
-            arr.append(result)
-        return {"data":arr}
+
+    def category_price_range_brand(price_upper_limit,price_lower_limit,brand_name):
+        all_products=db.session.query(Products.product_id,Products.product_name,Products.product_price,Products.product_description, Products.product_category, Products.product_available_qty).filter_by(Products.product_price<=price_upper_limit & Products.product_price>=price_lower_limit)
+        products=[]
+        for p in all_products:
+            products.append({"name":p.product_name,"id":p.product_id,"price":p.product_price,"description":p.product_description,"product_category":p.product_category,"product_available_qty":p.product_available_qty})
+        return {"data":products}
+    def detail_view(product_id):
+        
+        products=db.session.query(Products.product_id,Products.product_name,Products.product_price,Products.product_description, Products.product_category, Products.product_available_qty).filter(Products.product_id==product_id)
+        product=[]
+        for p in products:
+            product.append({"name":p.product_name,"id":p.product_id,"price":p.product_price,"description":p.product_description,"product_category":p.product_category,"product_available_qty":p.product_available_qty})
+        return {"data":product}
 
 @app.route("/home",methods=["GET"])
 @cross_origin(supports_credentials=True)
 def home_page():
     return Page.home(1)
 
+@app.route("/product/<id>",methods=["GET"])
+@cross_origin(supports_credentials=True)
+def detail_page(id):
+    print(id)
+    return Page.detail_view(id)
+
 if __name__ == "__main__":
     app.run(debug=True,port=5000)
+    # print(Page.category_price_range_brand())

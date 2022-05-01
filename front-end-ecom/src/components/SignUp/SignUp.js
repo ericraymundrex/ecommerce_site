@@ -1,19 +1,22 @@
 import "./SignUp.css"
 import { Fragment, useState } from "react"
 import axios  from "axios"
+import { useParams } from "react-router-dom";
+
 const SignUp = () =>{
+    let {usertype}=useParams()
     const [email,setEmail]=useState('')
     const [password,setPassword]=useState('')
     const [name,setName]=useState('')
 
     const loginHandler = async(event) => {
       event.preventDefault();
-      let message=await axios.post("http://localhost:5000/merchant/signup",{
+      let message=await axios.post(`/${usertype}/signup`,{
             name:name,
             email:email,
             password:password,
             
-        });
+        },{headers:{'Content-Type': 'application/json'}});
       console.log(message)
       setEmail('')
       setPassword('')

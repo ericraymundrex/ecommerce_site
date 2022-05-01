@@ -3,7 +3,8 @@ import axios from "axios"
 
 const config = {
   headers:{
-    "token": localStorage.getItem('token')
+    "token": localStorage.getItem('token'),
+    'Content-Type': 'application/json'
   }
 };
 
@@ -44,7 +45,7 @@ const AddItem = () =>{
     
     const submitHandler = async(event)=>{
       event.preventDefault();
-        let message=await axios.post("http://localhost:5000/merchant",{
+        let message=await axios.post("/merchant",{
           id:'',
           name:name,
           qty:quantity,

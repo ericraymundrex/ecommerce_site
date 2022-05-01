@@ -1,7 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Routes, Route } from "react-router-dom";
-import { Fragment, useState, useEffect } from 'react';
-import axios from "axios";
+import { Fragment} from 'react';
 
 import './App.css';
 
@@ -27,34 +26,23 @@ function App() {
 
                         //to be comented everything in between just for testing
   const localData = localStorage.getItem("token");
-  const [posts,setPosts]=useState({});
+  // const [posts,setPosts]=useState({});
 
-    const fetchPost=async()=>{
-        const res=await axios.get("http://localhost:5000/home");
-        console.log("res : "+res )
-        setPosts(res.data.data)
-    }
-    useEffect(()=>{
-        fetchPost()
-    },[])
+  //   const fetchPost=async()=>{
+  //       const res=await axios.get("http://localhost:5000/home");
+  //       console.log("res : "+res )
+  //       setPosts(res.data.data)
+  //   }
+  //   useEffect(()=>{
+  //       fetchPost()
+  //   },[])
   return (
     <Fragment>
-      {/* {localData ? <AddItem /> : <div><Login/> <SignUp/></div>} */}
-      {/* <div className="App"> */}
-      {/* <Main/> */}
-      {/* <Login/> */}
-      {/* </div> */}
-      {/* <Routes>
-        <Route path="/" element={<Main />} />
-      </Routes> */}
       <Routes>
         <Route path="/" element={<Main />} />
-        <Route path="/merchant" element={localData?<AddItem/>:<div><Login /> <SignUp/></div>} />
-        <Route path="/cart" element={<Cart/>}/>
-        
-        <Route path="/:id" element={<DetailView category={categories} content={posts}/>}/>
-
-        
+        <Route path="/:id" element={<DetailView categories={categories}/>}/>
+        <Route path="/auth/:usertype" element={localData?<AddItem/>:<div><Login /> <SignUp/></div>} />
+        <Route path="/cart" element={<Cart/>}/>        
       </Routes>
       
     </Fragment>

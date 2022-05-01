@@ -1,14 +1,15 @@
 import { Fragment, useState } from "react"
 import "./Login.css"
 import axios from 'axios'
+import { useParams } from "react-router-dom";
 
 const Login = () => {
+    let {usertype}=useParams()
     const [email,setEmail]=useState('')
     const [password,setPassword]=useState('')
-    
     const loginHandler = async(event) =>{
       event.preventDefault();
-      let token=await axios.post("/merchant/login",{
+      let token=await axios.post(`/${usertype}/login`,{
             email:email,
             password:password
         },{

@@ -1,4 +1,4 @@
-import { Fragment, useEffect } from "react";
+import { Fragment } from "react";
 
 const Cart = (props) =>{
 
@@ -38,7 +38,7 @@ const Cart = (props) =>{
                         <td class="qty"><input type="text" class="form-control" id="input1" value="2"/></td>
                         <td>178$</td>
                         <td>
-                            <a href="#" class="btn btn-danger btn-sm">
+                            <a href="/" class="btn btn-danger btn-sm">
                             <i class="fa fa-times"></i>
                             </a>
                         </td>

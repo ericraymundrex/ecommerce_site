@@ -1,3 +1,4 @@
+from unittest import result
 from Model import Products, Merchant as Merchant_model,Users,Purchase,db,app
 from flask import jsonify
 import bcrypt
@@ -6,7 +7,7 @@ import datetime
 
 class Merchant:
 
-    def addItem(id,name,qty,cat,price,des,merchant):
+    def addItem(id,name,qty,cat,price,des,merchant,product_rating):
         merchant_session=db.session.query(Merchant_model.merchant_id).filter_by(merchant_name=merchant.lower())
         print(merchant_session)
         if id != '':
@@ -17,13 +18,14 @@ class Merchant:
             updateItem.product_category=cat
             updateItem.product_description=des
             updateItem.merchants=merchant_session
+            updateItem.product_rating=product_rating
             db.session.commit()
 
             return "SuccessFully Updated"
         # .update(product_name=name,product_category=cat,product_available_qty=qty,product_price=price ,product_description=des)
 
         else:
-            newitem = Products(product_name=name,product_category=cat,product_available_qty=qty,product_price=price,product_description=des,merchants=merchant_session)
+            newitem = Products(product_name=name,product_category=cat,product_available_qty=qty,product_price=price,product_description=des,merchants=merchant_session,product_rating=0)
             db.session.add(newitem)
             db.session.commit()
             return "successfully added"
@@ -34,8 +36,19 @@ class Merchant:
         db.session.commit()
         return {"message":"Deleted"}
 
-    def ListItem():
-        pass
+    def ListItem(merchant):
+        result=db.session.query(Merchant_model,Products).join(Products).all()
+        data=[]
+        for merchant,product in result:
+            data.append({
+                "product_id":product.product_id,
+                "product_name":product.product_name,
+                "product_price":product.product_price,
+                "product_available_qty":product.product_available_qty,
+                "product_rating":product.product_rating
+            })
+        return jsonify({"data":data})
+        
 
     def signup(email,password,name):
         exist=db.session.query(Merchant_model.merchant_id).filter_by(merchant_email=email.lower()).first() is not None
