@@ -3,8 +3,9 @@ import { Fragment } from "react";
 import { useSelector } from "react-redux";
 import styles from './CheckOut.module.css'
 const CheckOut = () =>{
-    const { CartItem } = useSelector((state)=>state)
+    const CartItem = JSON.parse(localStorage.getItem("CartItem"))
     console.log(CartItem)
+    
 
     let sum=CartItem.reduce((item1,item2)=>item1.price+item2.price)
     let tableContent=CartItem.map((item)=>(
