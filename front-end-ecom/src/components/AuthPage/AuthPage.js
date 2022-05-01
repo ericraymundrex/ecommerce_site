@@ -21,6 +21,8 @@ const AuthPage=()=>{
         {pagestate==="login"?<Login />:<Singup />}
         <div className={styles.container}>
         <button onClick={clickHandler} className={styles.button}>{pagestate==="login"?"Don't have a account! click here to signup":"Go back to Login"}</button>
+        <br />
+        <a href='/auth/merchant'>Wanna bring business Online, Create a Merchant account</a>
         </div>
         </Fragment>
 

@@ -18,8 +18,8 @@ const Login = () => {
 
         console.log(token.data.token)
         localStorage.setItem("token",token.data.token)
-        localStorage.setItem("userType",token.data.email)
-        localStorage.setItem("email",token.data.userType)
+        localStorage.setItem("userType",token.data.userType)
+        localStorage.setItem("email",token.data.email)
         localStorage.setItem("name",token.data.name)
         
         setEmail('')
@@ -36,11 +36,11 @@ const Login = () => {
 
         <Fragment>
         <form onSubmit={loginHandler} className="Login">
-        <h3>Login Page, welcome back</h3>
+        <h3>Login Page, welcome</h3>
             <div className="container">
             
         <div className="mb-3 mt-3">
-          <label htmlFor="email" className="text">Email</label>
+          <label htmlFor="email">Email</label>
           <input
             type="email"
             name="email"

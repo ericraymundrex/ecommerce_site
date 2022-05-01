@@ -1,61 +1,57 @@
 import { Fragment } from "react";
+import { useSelector } from "react-redux";
+import "./Cart.css"
 
-const Cart = (props) =>{
+const Cart = ({setOpenModal}) =>{
+    const arr_id = []
+    const {CartItem} = useSelector((state) => state)
+    console.log(CartItem)
 
+    const renderBody = Object.values(CartItem).map((item)=>{
+            
+        return (            
+            <div className="body">
+            <p>{item.name}</p>
+            <br/>
+            </div>
+        )
+    })
     return(
         <Fragment>
 
-            <div class="modal" id="cartModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-                <div class="modal-content">
-                <div class="modal-header border-bottom-0">
-                    <h5 class="modal-title" id="exampleModalLabel">
-                    Your Shopping Cart
-                    </h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <table class="table table-image">
-                    <thead>
-                        <tr>
-                        <th scope="col"></th>
-                        <th scope="col">Product</th>
-                        <th scope="col">Price</th>
-                        <th scope="col">Qty</th>
-                        <th scope="col">Total</th>
-                        <th scope="col">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                        <td class="w-25">
-                            <img src="https://s3.eu-central-1.amazonaws.com/bootstrapbaymisc/blog/24_days_bootstrap/vans.png" class="img-fluid img-thumbnail" alt="Sheep"/>
-                        </td>
-                        <td>Vans Sk8-Hi MTE Shoes</td>
-                        <td>89$</td>
-                        <td class="qty"><input type="text" class="form-control" id="input1" value="2"/></td>
-                        <td>178$</td>
-                        <td>
-                            <a href="/" class="btn btn-danger btn-sm">
-                            <i class="fa fa-times"></i>
-                            </a>
-                        </td>
-                        </tr>
-                    </tbody>
-                    </table> 
-                    <div class="d-flex justify-content-end">
-                    <h5>Total: <span class="price text-success">89$</span></h5>
-                    </div>
-                </div>
-                <div class="modal-footer border-top-0 d-flex justify-content-between">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-success">Checkout</button>
-                </div>
-                </div>
-            </div>
-            </div>
+<div className="modalBackground">
+      <div className="modalContainer">
+        <div className="titleCloseBtn">
+          <button
+            onClick={() => {
+              setOpenModal(false);
+            }}
+          >
+            X
+          </button>
+        </div>
+        <div className="title">
+          <h1>Your Cart</h1>
+        </div>
+        
+            {renderBody}
+          {/* {CartItem.maps((item)=>(
+              <p>{item</p>
+          ))} */}
+        
+        <div className="footer">
+          <button
+            onClick={() => {
+              setOpenModal(false);
+            }}
+            id="cancelBtn"
+          >
+            Cancel
+          </button>
+          <button>Continue</button>
+        </div>
+      </div>
+    </div>
         </Fragment>
     )
 }

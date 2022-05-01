@@ -3,9 +3,24 @@ import { useState,useEffect } from "react";
 import axios from "axios";
 import { Route, Routes } from "react-router-dom";
 import DetailView from "../DetailView/DetailView"
+import Product from "../Product/Product";
 // import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 
 const Card = () =>{
+
+    const [cartItems, setCartItems] = useState([]);
+    const onAdd = (product) => {
+        const exist = cartItems.find((x) => x.id === product.id);
+        if (exist) {
+          setCartItems(
+            cartItems.map((x) => (
+              x.id === product.id ? { ...exist, qty: exist.qty + 1 } : x
+            ))
+          );
+        } else {
+          setCartItems([...cartItems, { ...product, qty: 1 }]);
+        }
+      };
     // const arr= [
     //     {
     //         id:1,
@@ -21,32 +36,26 @@ const Card = () =>{
 
     const fetchPost=async()=>{
         const res=await axios.get("/home");
-        console.log("res : "+res.data.data )
+        console.log("res : "+res )
         setPosts(res.data.data)
     }
     useEffect(()=>{
         fetchPost()
     },[])
     
-    const renderPosts=Object.values(posts).map((post)=>{
-        return <div className="Element"
-                    key={post.id}
-                    >
-                     <div className="Card-body">
-                            <a href={`/${post.id}`}><img src="https://2.img-dpreview.com/files/p/E~C1000x0S4000x4000T1200x1200~articles/3925134721/0266554465.jpeg" alt="This is a img"/></a>
-                            <h5>{post.name.slice(0,15)}...</h5>
-                            <p>Rs : {post.price} /-</p>
-                            <input type="button" value="Add to Cart"/>       
-                    </div>
-            </div>
+    const renderTrendingPosts=Object.values(posts).map((post)=>{
+        return <Product className="Element" key={post.id} post={post} onAdd={onAdd}/>
+                     
+            
     })
 
-
+    // console.log(cartItems.length)
     return(
         <div className="Card">
             <p>Trending</p>
             <div className="Row">
-                {renderPosts}
+                {renderTrendingPosts}
+                
                     
             </div>
             <p>Top Brands For You</p>

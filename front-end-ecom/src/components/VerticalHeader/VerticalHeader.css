@@ -7,7 +7,7 @@
 
 .vertical-menu {
   max-width: 200px;
-  height: 250px;
+  max-height: 250px;
   overflow-y: auto;
   border-radius: 0.65rem;
 }

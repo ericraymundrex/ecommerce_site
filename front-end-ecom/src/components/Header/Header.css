@@ -12,10 +12,38 @@
     font-size: 20px;
 }
 
-.cart{
-    margin: 0 100px 0 1rem;
-}
-
+.cart-icon {
+    display: flex;
+    text-align: end;
+    margin-right: 2rem;
+    align-items: center;
+    position: relative;
+    justify-content: flex-end;
+  }
+  
+  .cart-icon img {
+    width: 3rem;
+    height: 3rem;
+    color: #2f80ed;
+    cursor: pointer;
+  }
+  
+  .cart-icon p {
+    position: absolute;
+    width: 1.7rem;
+    height: 1.7rem;
+    right: -0.5rem;
+    top: -0.2rem;
+    border-radius: 50%;
+    background: #99cbf7;
+    color: #fff;
+    box-sizing: border-box;
+    font-size: 1.6rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--main-color);
+  }
 .nav{
     background-color:#22577E ;
     display: flex;
