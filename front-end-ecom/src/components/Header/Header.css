@@ -1,3 +1,5 @@
+
+
 .active{
     border-bottom: 3px solid white;
     color: white;
@@ -5,12 +7,20 @@
     font-weight: bold;
 }
 
-.brand,.cart{
+.brand{
     font-family: 'Times New Roman', Times, serif;
-    margin-left: 100px;
     color: whitesmoke;
+    padding-left: 0.55rem;
     font-size: 20px;
 }
+span{
+  color: white;
+}
+.search-container{
+  width: 70%;
+  display: flex;
+}
+
 
 .cart-icon {
     display: flex;
@@ -47,5 +57,5 @@
 .nav{
     background-color:#22577E ;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
 }

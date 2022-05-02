@@ -4,10 +4,16 @@ import axios from "axios";
 import { Route, Routes } from "react-router-dom";
 import DetailView from "../DetailView/DetailView"
 import Product from "../Product/Product";
+import { useSelector } from "react-redux";
+import Cart from "../Cart/Cart";
+
 // import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 
 const Card = () =>{
     const [pos,setPos]=useState(1)
+    const [modalOpen, setModalOpen] = useState(false);
+    const {CartItem} = useSelector((state) => state)
+
     console.log(pos)
     const [cartItems, setCartItems] = useState([]);
     const onAdd = (product) => {
@@ -22,17 +28,7 @@ const Card = () =>{
           setCartItems([...cartItems, { ...product, qty: 1 }]);
         }
       };
-    // const arr= [
-    //     {
-    //         id:1,
-    //         name:"dnndjn",
-    //         price:1000
-    //     },
-    //     {
-    //         id:2,
-    //         name:"wwknknwkw",
-    //         price:2000
-    //     }]
+    
     const [posts,setPosts]=useState({});
 
     const fetchPost=async()=>{
@@ -57,8 +53,17 @@ const Card = () =>{
     const move_right=()=>setPos(pos+1)
 
     return(
+        
         <div className="Card">
+            
             <p>Trending</p>
+            <div className="cart-icon">
+                <img onClick={() => {
+                    setModalOpen(true);
+                    }}
+                    src="../images/cart.png" alt="cart"/>
+                {CartItem.length === 0 ? "" : <p>{CartItem.length}</p>}
+            </div>
             <div className="Row">
                 <a id="left" type="button" onClick={move_left}><img src="./images/left.png" width="40" height="40"/></a>
                 {renderTrendingPosts}
@@ -142,9 +147,8 @@ const Card = () =>{
                     </div>
                 </div>
             </div>
-            <Routes>
-                <Route path="/dnndjn" element={<DetailView/>} />
-            </Routes>
+
+            {modalOpen && <Cart setOpenModal={setModalOpen} />}
 
         
         </div>

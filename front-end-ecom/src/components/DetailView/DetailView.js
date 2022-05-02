@@ -84,7 +84,7 @@ const DetailView = (props) =>{
                             {posts.product_available_qty > 5 ? "" : 
                             <p className="warning"> * Only <span>{n}</span> left in stock</p>}
                             {/* product rating: {product_rating} */}
-                             <input type="number" max={5} min={0} onChange={onReviewChangeHandler}></input>
+                            <span>Rating :</span><input type="number" max={5} min={1} onChange={onReviewChangeHandler}></input>
                              <button onClick={submitReview}>Submit</button>
                     </div>
                     
