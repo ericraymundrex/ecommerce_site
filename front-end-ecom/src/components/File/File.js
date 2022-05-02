@@ -1,52 +1,30 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import axios, { post } from 'axios';
 
-class SimpleReactFileUpload extends React.Component {
-
-  constructor(props) {
-    super(props);
-    this.state ={
-      file:null
-    }
-    this.onFormSubmit = this.onFormSubmit.bind(this)
-    this.onChange = this.onChange.bind(this)
-    this.fileUpload = this.fileUpload.bind(this)
+class File extends React.Component {
+  state={
+    selectedFile:null
   }
-
-  onFormSubmit(e){
-    e.preventDefault() // Stop form submit
-    this.fileUpload(this.state.file).then((response)=>{
-      console.log(response.data);
+  fileSelectorHandler=event=>{
+    this.setState({
+      selectedFile:event.target.files[0]
     })
   }
-
-  onChange(e) {
-    this.setState({file:e.target.files[0]})
+  uploadHandler=event=>{
+    const fd=new FormData()
+    fd.append('files[]',this.state.selectedFile,`${this.props.img_id}.png`)
+    axios.post('/merchant/img',fd).then(res=>console.log(res))
   }
-
-  fileUpload(file){
-    const url = '/merchant/img';
-    const formData = new FormData();
-    formData.append('file',file)
-    const config = {
-        headers: {
-            'content-type': 'multipart/form-data'
-        }
-    }
-    return  post(url, formData,config)
-  }
-
-  render() {
-    return (
-      <form onSubmit={this.onFormSubmit}>
-        <h1>File Upload</h1>
-        <input type="file" onChange={this.onChange} />
-        <button type="submit">Upload</button>
-      </form>
-   )
+  render(){
+    return(
+      <Fragment>
+        <input type="file" onChange={this.fileSelectorHandler}/>
+        <button onClick={this.uploadHandler}>upload</button>
+      </Fragment>
+    )
   }
 }
 
 
 
-export default SimpleReactFileUpload
+export default File

@@ -62,12 +62,13 @@ def root():
         cat = request_sent['cat']
         des = request_sent['des']
         price = int(request_sent['price'])
+        img_id=request_sent['img_id']
         if id !='':
             product_rating=request_sent['product_rating']
         else:
             product_rating=0
         print(merchant)
-        return Merchant.addItem(id,name,qty,cat,price,des,merchant['name'],product_rating)
+        return Merchant.addItem(id,name,qty,cat,price,des,merchant['name'],product_rating,img_id)
     if request.method=="GET":
         return Merchant.ListItem(merchant)
         
@@ -84,15 +85,17 @@ def allowed_file(filename):
 
 @app.route('/merchant/img',methods=["POST"])
 def img():
-    print("hihih")
-    files = request.files.getlist('file')
-    print(files)
     bucket_name = "system-item-bucket"
-    if 'files' not in request.files['files']:
+
+    if 'files[]' not in request.files:
+            # response = jsonify({"messgae": "No file in the request"})
+            # response.status_code = 400
         return jsonify({"messgae": "No file in the request"}),400
-    files = request.files.getlist('files')
+
+    files = request.files.getlist('files[]')
     errors = {}
     success = False
+
     for file in files:
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
@@ -100,7 +103,8 @@ def img():
             success = True
         else:
             errors[file.filename] = 'File type is not allowed'
-            statics_folder = glob.glob('static/*')
+
+    statics_folder = glob.glob('static/*')
     print(statics_folder)
     for file_in_static in statics_folder:
         client = aws.client('s3');
@@ -122,7 +126,7 @@ def img():
     else:
         resp = jsonify(errors)
         resp.status_code = 500
-    return resp        
+        return resp
 #--------------------------------------------------------------------------------------------------------------------
 #------------------------------------------------------------ USER---------------------------------------------------
 #--------------------------------------------------------------------------------------------------------------------

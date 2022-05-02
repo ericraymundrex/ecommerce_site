@@ -9,7 +9,7 @@ import datetime
 
 class Merchant:
 
-    def addItem(id,name,qty,cat,price,des,merchant,product_rating):
+    def addItem(id,name,qty,cat,price,des,merchant,product_rating,img_id):
         merchant_session=db.session.query(Merchant_model.merchant_id).filter_by(merchant_name=merchant.lower())
         print(merchant_session)
         if id != '':
@@ -21,13 +21,14 @@ class Merchant:
             updateItem.product_description=des
             updateItem.merchants=merchant_session
             updateItem.product_rating=product_rating
+            updateItem.img_id=img_id
             db.session.commit()
 
             return "SuccessFully Updated"
         # .update(product_name=name,product_category=cat,product_available_qty=qty,product_price=price ,product_description=des)
 
         else:
-            newitem = Products(product_name=name,product_category=cat,product_available_qty=qty,product_price=price,product_description=des,merchants=merchant_session,product_rating=0)
+            newitem = Products(product_name=name,product_category=cat,product_available_qty=qty,product_price=price,product_description=des,merchants=merchant_session,product_rating=0,img_id=img_id)
             db.session.add(newitem)
             db.session.commit()
             return{"message":"success"}

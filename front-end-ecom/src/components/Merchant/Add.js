@@ -2,6 +2,7 @@ import { Fragment, useState, useEffect } from "react"
 import axios from "axios"
 import "./ShowList.css"
 import File from "../File/File"
+import uuid from 'react-uuid'
 const config = {
   headers:{
     "token": localStorage.getItem('token'),
@@ -10,6 +11,7 @@ const config = {
 };
 
 const AddItem = () =>{
+  const [img_id,]=useState(uuid())
     const categories = [{'id':0,'value':''},
                         {'id':1,'value':'Electronics'},
                         {'id':2,'value':'Men Fashion'},
@@ -24,7 +26,7 @@ const AddItem = () =>{
     const [category,setCat]=useState('')
     const [description,setDes]=useState('')
     const [price,setPrice]=useState('')
-    const [files,setFiles]=useState([])                    
+    // const [files,setFiles]=useState([])                    
     const nameChangeHandler = (event) =>{
       setName(event.target.value)
     }
@@ -65,24 +67,18 @@ const AddItem = () =>{
           cat:category,
           des:description,
           price:price,
+          img_id:img_id
       },config);
 
-console.log(files[0])
-    await axios.post("/merchant/img",{
-        "files[]":files[0]
-    },{
-      header:{
-        "token": localStorage.getItem('token'),
-        'Content-Type': 'multipart/form-data'
-      }
-    });
+// console.log(files[0])
+    
     }
 
 
-    const imgChangeHandler=(event)=>{
-        setFiles(event.target.files)
-    }
-    console.log(files)
+    // const imgChangeHandler=(event)=>{
+    //     setFiles(event.target.files)
+    // }
+    // console.log(files)
     return(
         <Fragment>
             <form onSubmit={submitHandler} className="AddItem" >
@@ -160,7 +156,7 @@ console.log(files[0])
             onChange={imgChangeHandler}
           />
         </div>  */}
-        {/* <File /> */}
+        <File img_id={img_id}/>
         <div className="btn-container">
         
         <button type="submit" className="btn btn-primary">

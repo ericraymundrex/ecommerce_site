@@ -11,7 +11,8 @@ app=Flask(__name__)
 CORS(app)
 Api(app)
 db=SQLAlchemy(app)
-
+UPLOAD_FOLDER = './static'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
 app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///Ecommerce.sqlite3'
@@ -31,12 +32,12 @@ class Products(db.Model):
     product_description=db.Column(db.String(1000))
     product_price=db.Column(db.Integer)
     product_rating=db.Column(db.Float)
-
+    img_id=db.Column(db.String(50))
     purchases=relationship('Purchase',backref="products")
 
     merchants=db.Column(db.Integer,ForeignKey("merchant.id"))
 
-    def __init__(self,product_name,product_category,product_available_qty,product_price,product_description,product_rating,merchants):
+    def __init__(self,product_name,product_category,product_available_qty,product_price,product_description,product_rating,merchants,img_id):
         self.product_name = product_name
         self.product_category = product_category
         self.product_price = product_price
@@ -44,6 +45,7 @@ class Products(db.Model):
         self.product_description = product_description
         self.product_rating=product_rating
         self.merchants=merchants
+        self.img_id=img_id
 
 
 class Merchant(db.Model):
