@@ -13,6 +13,7 @@ import os
 
 import boto3 as aws
 import glob
+import static
 #--------------------------------------------------------------------------------------------------------------------
 #------------------------------------------------------------ MERCHANT-----------------------------------------------
 #--------------------------------------------------------------------------------------------------------------------
@@ -257,10 +258,11 @@ class Page():
     def home(page):
         rows = db.session.query(Products).count()
         offseter=rows-page*10
-        all_products=db.session.query(Products.product_id,Products.product_name,Products.product_price,Products.product_description, Products.product_category, Products.product_available_qty,Products.product_rating).offset(offseter).limit(10).all()
+        all_products=db.session.query(Products.product_id,Products.product_name,Products.product_price,Products.product_description, Products.product_category, Products.product_available_qty,Products.product_rating,Products.img_id).offset(offseter).limit(10).all()
         products=[]
         for p in all_products:
-            products.append({"name":p.product_name,"id":p.product_id,"price":p.product_price,"description":p.product_description,"product_category":p.product_category,"product_available_qty":p.product_available_qty,"product_rating":p.product_rating})
+            products.append({"name":p.product_name,"id":p.product_id,"price":p.product_price,"description":p.product_description,"product_category":p.product_category,"product_available_qty":p.product_available_qty,"product_rating":p.product_rating,"img":"http://localhost:5000/static/"+str(p.img_id)+str(".png")})
+            print(products)
         return {"data":products}
 
     def category_price_range_brand(price_upper_limit,price_lower_limit,brand_name):

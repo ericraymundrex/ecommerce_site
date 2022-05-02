@@ -7,6 +7,7 @@ import Product from "../Product/Product";
 import { useSelector } from "react-redux";
 import Cart from "../Cart/Cart";
 
+
 // import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 
 const Card = () =>{
