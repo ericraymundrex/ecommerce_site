@@ -59,10 +59,12 @@ const Card = () =>{
     return(
         <div className="Card">
             <p>Trending</p>
-            <button type="button" onClick={move_left}>move left</button>
-            <button type="button" onClick={move_right}>move right</button>
             <div className="Row">
+                <a id="left" type="button" onClick={move_left}><img src="./images/left.png" width="40" height="40"/></a>
                 {renderTrendingPosts}
+                <a id="right" type="button" onClick={move_right}><img src="./images/right.png" width="40" height="40"/></a>
+               
+
                 
                     
             </div>
