@@ -273,7 +273,7 @@ class Page():
             product.append({"name":p.product_name,"id":p.product_id,"price":p.product_price,"description":p.product_description,"product_category":p.product_category,"product_available_qty":p.product_available_qty,"product_rating":p.product_rating})
         return {"data":product}
 
-@app.route("/home",methods=["GET"])
+@app.route("/home",methods=["POST"])
 @cross_origin(supports_credentials=True)
 def home_page():
     request_sent=request.get_json()

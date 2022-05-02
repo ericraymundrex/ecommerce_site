@@ -7,7 +7,8 @@ import Product from "../Product/Product";
 // import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 
 const Card = () =>{
-
+    const [pos,setPos]=useState(1)
+    console.log(pos)
     const [cartItems, setCartItems] = useState([]);
     const onAdd = (product) => {
         const exist = cartItems.find((x) => x.id === product.id);
@@ -35,21 +36,31 @@ const Card = () =>{
     const [posts,setPosts]=useState({});
 
     const fetchPost=async()=>{
-        const res=await axios.get("/home");
+        const res=await axios.post("/home",{offset:pos},{headers:{"Content-Type":"application/json"}});
         setPosts(res.data.data)
+        
     }
     useEffect(()=>{
         fetchPost()
-    },[])
+    },[pos])
     
     const renderTrendingPosts=Object.values(posts).map((post)=>{
         return <Product className="Element" key={post.id} post={post} onAdd={onAdd}/>
                      
             
     })
+
+    const move_left=()=>{
+        if(pos>1)
+            setPos(pos-1)
+    }
+    const move_right=()=>setPos(pos+1)
+
     return(
         <div className="Card">
             <p>Trending</p>
+            <button type="button" onClick={move_left}>move left</button>
+            <button type="button" onClick={move_right}>move right</button>
             <div className="Row">
                 {renderTrendingPosts}
                 
