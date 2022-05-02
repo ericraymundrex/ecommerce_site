@@ -12,15 +12,18 @@ CORS(app)
 Api(app)
 db=SQLAlchemy(app)
 
+
+
 app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///Ecommerce.sqlite3'
 app.config['SECRET_KEY'] = "Thisisasecertkey"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.config['CORS_HEADERS'] = 'Content-Type'
 app.config["Access-Control-Allow-Origin"]="*"
 app.config["Strict-Access-Control-Allow-Origin"]="*"
-
+app.config["WHOOSH_BASE"]="whoosh"
 
 class Products(db.Model):
+
     product_id=db.Column('id',db.Integer,primary_key=True)
     product_name=db.Column(db.String(100))
     product_category=db.Column(db.String(50))
@@ -92,6 +95,7 @@ class Purchase(db.Model):
         self.quantity=quantity
 
 db.create_all()
+
 
 if __name__ == "__main__":
     app.run(debug=True,port=5002)

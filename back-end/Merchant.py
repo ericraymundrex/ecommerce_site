@@ -1,9 +1,11 @@
 from unittest import result
 from Model import Products, Merchant as Merchant_model,Users,Purchase,db,app
-from flask import jsonify
+from flask import jsonify, request
 import bcrypt
 import jwt
 import datetime
+
+
 
 class Merchant:
 
@@ -28,9 +30,9 @@ class Merchant:
             newitem = Products(product_name=name,product_category=cat,product_available_qty=qty,product_price=price,product_description=des,merchants=merchant_session,product_rating=0)
             db.session.add(newitem)
             db.session.commit()
-            return "successfully added"
+            return{"message":"success"}
 
-
+        
     def deleteItem(id):
         Products.query.filter_by(product_id=id).delete()
         db.session.commit()

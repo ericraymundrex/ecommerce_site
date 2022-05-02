@@ -40,6 +40,25 @@ const DetailView = (props) =>{
         return elements
     }
 
+    const [review,setReview]=useState(0)
+    const submitReview=async(event)=>{
+    
+        event.preventDefault();
+        let message=await axios.post("/user/review",{
+            id:id,
+            rate:review
+        },{
+            headers:{
+                "Content-Type":"application/json",
+                "token":localStorage.getItem("token")
+            }
+        })
+        console.log(message)
+    }
+
+    const onReviewChangeHandler=(event)=>{
+        setReview(event.target.value)
+    }
     return (
         <Fragment>
             
@@ -64,9 +83,12 @@ const DetailView = (props) =>{
                             </div>
                             {posts.product_available_qty > 5 ? "" : 
                             <p className="warning"> * Only <span>{n}</span> left in stock</p>}
+                            {/* product rating: {product_rating} */}
+                             <input type="number" max={5} min={0} onChange={onReviewChangeHandler}></input>
+                             <button onClick={submitReview}>Submit</button>
                     </div>
                     
-
+                               
                 </div>
             </div> 
         </Fragment>

@@ -1,7 +1,7 @@
 import { Fragment, useState, useEffect } from "react"
 import axios from "axios"
 import "./ShowList.css"
-
+import File from "../File/File"
 const config = {
   headers:{
     "token": localStorage.getItem('token'),
@@ -24,7 +24,7 @@ const AddItem = () =>{
     const [category,setCat]=useState('')
     const [description,setDes]=useState('')
     const [price,setPrice]=useState('')
-                        
+    const [files,setFiles]=useState([])                    
     const nameChangeHandler = (event) =>{
       setName(event.target.value)
     }
@@ -58,16 +58,31 @@ const AddItem = () =>{
     
     const submitHandler = async(event)=>{
       event.preventDefault();
-        let message=await axios.post("/merchant",{
+        await axios.post("/merchant",{
           id:'',
           name:name,
           qty:quantity,
           cat:category,
           des:description,
           price:price,
-          
       },config);
+
+console.log(files[0])
+    await axios.post("/merchant/img",{
+        "files[]":files[0]
+    },{
+      header:{
+        "token": localStorage.getItem('token'),
+        'Content-Type': 'multipart/form-data'
+      }
+    });
     }
+
+
+    const imgChangeHandler=(event)=>{
+        setFiles(event.target.files)
+    }
+    console.log(files)
     return(
         <Fragment>
             <form onSubmit={submitHandler} className="AddItem" >
@@ -134,7 +149,18 @@ const AddItem = () =>{
             onChange={desChangeHandler}
           />
         </div>
-        
+        {/* <div className="mb-3 mt-3">
+          <label htmlFor="des">Image</label>
+          <input
+            type="file"
+            name="des"
+            id="des"
+            className="form-control"
+            placeholder="Enter Description"
+            onChange={imgChangeHandler}
+          />
+        </div>  */}
+        {/* <File /> */}
         <div className="btn-container">
         
         <button type="submit" className="btn btn-primary">

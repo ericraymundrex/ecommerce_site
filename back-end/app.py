@@ -1,3 +1,4 @@
+
 from Model import Products, Merchant as Merchant_model,Users,Purchase,db,app
 from Merchant import Merchant
 from flask import request, jsonify
@@ -7,6 +8,11 @@ import datetime
 from functools import wraps
 from sqlalchemy import select
 from flask_cors import cross_origin
+from werkzeug.utils import secure_filename
+import os
+
+import boto3 as aws
+import glob
 #--------------------------------------------------------------------------------------------------------------------
 #------------------------------------------------------------ MERCHANT-----------------------------------------------
 #--------------------------------------------------------------------------------------------------------------------
@@ -70,6 +76,53 @@ def root():
 @token_required_merchant
 def delete(id):
     return Merchant.deleteItem(id)
+
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'mp4'}
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@app.route('/merchant/img',methods=["POST"])
+def img():
+    print("hihih")
+    files = request.files.getlist('file')
+    print(files)
+    bucket_name = "system-item-bucket"
+    if 'files' not in request.files['files']:
+        return jsonify({"messgae": "No file in the request"}),400
+    files = request.files.getlist('files')
+    errors = {}
+    success = False
+    for file in files:
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            success = True
+        else:
+            errors[file.filename] = 'File type is not allowed'
+            statics_folder = glob.glob('static/*')
+    print(statics_folder)
+    for file_in_static in statics_folder:
+        client = aws.client('s3');
+        client.upload_file(file_in_static, bucket_name, file_in_static.split("/")[1])
+    for file in statics_folder:
+        os.remove(file)
+
+    if success and errors:
+        errors['message'] = 'File(s) successfully uploaded'
+        resp = jsonify(errors)
+        resp.status_code = 500
+
+        return resp
+    if success:
+        resp = jsonify({'message': 'Files successfully uploaded'})
+        resp.status_code = 201
+
+        return resp
+    else:
+        resp = jsonify(errors)
+        resp.status_code = 500
+    return resp        
 #--------------------------------------------------------------------------------------------------------------------
 #------------------------------------------------------------ USER---------------------------------------------------
 #--------------------------------------------------------------------------------------------------------------------
@@ -131,6 +184,13 @@ class User:
         db.session.commit()
         return {"message":"product entered successfully"}
 
+    def Reviews(id,rating):
+        updateItem = Products.query.get(id)
+        print(updateItem.product_rating)
+        print(rating)
+        updateItem.product_rating=int((updateItem.product_rating+int(rating))/2)
+        db.session.commit()
+        return {"message":"success"}
     def purchase_history(user_id):
         # result=db.session.query(Purchase,Users).select_from(Users).join(Users).filter(Users.user_id==user_id).all()
         # data=[]
@@ -176,6 +236,13 @@ def purchase():
     if request.method=="GET":
         return User.purchase_history(user_email)
 
+@app.route("/user/review",methods=["POST"])
+@token_required_user
+def review():
+    request_sent=request.get_json()
+    id=request_sent['id']
+    rate=request_sent['rate']
+    return User.Reviews(id,rate)
 #--------------------------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------------------------
@@ -184,10 +251,12 @@ def purchase():
 
 class Page():
     def home(page):
-        all_products=db.session.query(Products.product_id,Products.product_name,Products.product_price,Products.product_description, Products.product_category, Products.product_available_qty).all()
+        rows = db.session.query(Products).count()
+        offseter=rows-page*10
+        all_products=db.session.query(Products.product_id,Products.product_name,Products.product_price,Products.product_description, Products.product_category, Products.product_available_qty,Products.product_rating).offset(offseter).limit(10).all()
         products=[]
         for p in all_products:
-            products.append({"name":p.product_name,"id":p.product_id,"price":p.product_price,"description":p.product_description,"product_category":p.product_category,"product_available_qty":p.product_available_qty})
+            products.append({"name":p.product_name,"id":p.product_id,"price":p.product_price,"description":p.product_description,"product_category":p.product_category,"product_available_qty":p.product_available_qty,"product_rating":p.product_rating})
         return {"data":products}
 
     def category_price_range_brand(price_upper_limit,price_lower_limit,brand_name):
@@ -198,16 +267,19 @@ class Page():
         return {"data":products}
     def detail_view(product_id):
         
-        products=db.session.query(Products.product_id,Products.product_name,Products.product_price,Products.product_description, Products.product_category, Products.product_available_qty).filter(Products.product_id==product_id)
+        products=db.session.query(Products.product_id,Products.product_name,Products.product_price,Products.product_description, Products.product_category, Products.product_available_qty, Products.product_rating).filter(Products.product_id==product_id)
         product=[]
         for p in products:
-            product.append({"name":p.product_name,"id":p.product_id,"price":p.product_price,"description":p.product_description,"product_category":p.product_category,"product_available_qty":p.product_available_qty})
+            product.append({"name":p.product_name,"id":p.product_id,"price":p.product_price,"description":p.product_description,"product_category":p.product_category,"product_available_qty":p.product_available_qty,"product_rating":p.product_rating})
         return {"data":product}
 
 @app.route("/home",methods=["GET"])
 @cross_origin(supports_credentials=True)
 def home_page():
-    return Page.home(1)
+    request_sent=request.get_json()
+    print(request_sent)
+    offset=request_sent['offset']    
+    return Page.home(offset)
 
 @app.route("/product/<id>",methods=["GET"])
 @cross_origin(supports_credentials=True)
@@ -215,6 +287,12 @@ def detail_page(id):
     print(id)
     return Page.detail_view(id)
 
+
+@app.route("/search",methods=["GET"])
+@cross_origin(supports_credentials=True)
+def search():
+    posts=Products.query.whoosh_search(request.args.get('query')).all()
+    return jsonify({"data":posts})
 if __name__ == "__main__":
     app.run(debug=True,port=5000)
     # print(Page.category_price_range_brand())
