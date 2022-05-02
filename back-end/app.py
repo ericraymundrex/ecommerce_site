@@ -1,4 +1,7 @@
 
+from crypt import methods
+from unicodedata import category
+from numpy import product
 from Model import Products, Merchant as Merchant_model,Users,Purchase,db,app
 from Merchant import Merchant
 from flask import request, jsonify
@@ -13,7 +16,7 @@ import os
 
 import boto3 as aws
 import glob
-import static
+import re
 #--------------------------------------------------------------------------------------------------------------------
 #------------------------------------------------------------ MERCHANT-----------------------------------------------
 #--------------------------------------------------------------------------------------------------------------------
@@ -110,8 +113,8 @@ def img():
     for file_in_static in statics_folder:
         client = aws.client('s3');
         client.upload_file(file_in_static, bucket_name, file_in_static.split("/")[1])
-    for file in statics_folder:
-        os.remove(file)
+    # for file in statics_folder:
+    #     os.remove(file)
 
     if success and errors:
         errors['message'] = 'File(s) successfully uploaded'
@@ -262,9 +265,15 @@ class Page():
         products=[]
         for p in all_products:
             products.append({"name":p.product_name,"id":p.product_id,"price":p.product_price,"description":p.product_description,"product_category":p.product_category,"product_available_qty":p.product_available_qty,"product_rating":p.product_rating,"img":"http://localhost:5000/static/"+str(p.img_id)+str(".png")})
-            print(products)
         return {"data":products}
 
+    def Unique_Categories():
+        query = db.session.query(Products.product_category.distinct())
+        unique_cat = []
+        for p in query:
+            unique_cat.append({"id":len(unique_cat)+1,"name":str(p).split("'")[1].replace(' ',''),"value":str(p).split("'")[1]})
+        return {"data": unique_cat}
+    
     def category_price_range_brand(price_upper_limit,price_lower_limit,brand_name):
         all_products=db.session.query(Products.product_id,Products.product_name,Products.product_price,Products.product_description, Products.product_category, Products.product_available_qty).filter_by(Products.product_price<=price_upper_limit & Products.product_price>=price_lower_limit)
         products=[]
@@ -279,6 +288,14 @@ class Page():
             product.append({"name":p.product_name,"id":p.product_id,"price":p.product_price,"description":p.product_description,"product_category":p.product_category,"product_available_qty":p.product_available_qty,"product_rating":p.product_rating})
         return {"data":product}
 
+    def filter_By_Category(category):
+
+        products = db.session.query(Products.product_id,Products.product_name,Products.product_price,Products.product_description, Products.product_category, Products.product_available_qty,Products.product_rating,Products.img_id).filter(Products.product_category == category).all()
+        product = []
+        for p in products:
+            product.append({"name":p.product_name,"id":p.product_id,"price":p.product_price,"description":p.product_description,"product_category":p.product_category,"product_available_qty":p.product_available_qty,"product_rating":p.product_rating,"img":"http://localhost:5000/static/"+str(p.img_id)+str(".png")})
+        return {"data":product}
+
 @app.route("/home",methods=["POST"])
 @cross_origin(supports_credentials=True)
 def home_page():
@@ -287,18 +304,35 @@ def home_page():
     offset=request_sent['offset']    
     return Page.home(offset)
 
+@app.route("/category",methods=["GET"])
+# @cross_origin(supports_credentials=True)
+def get_category_list():
+    return Page.Unique_Categories()
+
 @app.route("/product/<id>",methods=["GET"])
 @cross_origin(supports_credentials=True)
 def detail_page(id):
     print(id)
     return Page.detail_view(id)
 
+@app.route("/<val>",methods=["GET"])
+@cross_origin(supports_credentials=True)
+def filter_category(val):
+    category_name = str(val[0])
+    for i in range(1,len(val)):
+        if val[i] >= 'Z':
+            category_name += str(val[i])
+        elif 'A' <= val[i] <= 'Z':
+            category_name += (" " + str(val[i]))
+    return Page.filter_By_Category(category_name)
 
 @app.route("/search",methods=["GET"])
 @cross_origin(supports_credentials=True)
 def search():
     posts=Products.query.whoosh_search(request.args.get('query')).all()
     return jsonify({"data":posts})
+
+
 if __name__ == "__main__":
     app.run(debug=True,port=5000)
     # print(Page.category_price_range_brand())

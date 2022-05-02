@@ -12,14 +12,19 @@ const config = {
 
 const AddItem = () =>{
   const [img_id,]=useState(uuid())
-    const categories = [{'id':0,'value':''},
-                        {'id':1,'value':'Electronics'},
-                        {'id':2,'value':'Men Fashion'},
-                        {'id':3,'value':'Women Fashion'},
-                        {'id':4,'value':'Mobile Phone'},
-                        {'id':5,'value':'Sports Item'},
-                        {'id':6,'value':'Men Footware'},
-                        {'id':7,'value':'Women Footware'}]
+  const [categories,setCategories] = useState([])
+  const fetchCat=async()=>{
+      const res=await axios.get("/category",config);
+      setCategories(res.data.data)
+  }
+    // const categories = [{'id':0,'value':''},
+    //                     {'id':1,'value':'Electronics'},
+    //                     {'id':2,'value':'Men Fashion'},
+    //                     {'id':3,'value':'Women Fashion'},
+    //                     {'id':4,'value':'Mobile Phone'},
+    //                     {'id':5,'value':'Sports Item'},
+    //                     {'id':6,'value':'Men Footware'},
+    //                     {'id':7,'value':'Women Footware'}]
     
     const [name,setName]=useState('')
     const [quantity,setQty]=useState('')
@@ -54,6 +59,7 @@ const AddItem = () =>{
   }
   useEffect(()=>{
       fetchData()
+      fetchCat()
   },[])
   console.log(data)
 

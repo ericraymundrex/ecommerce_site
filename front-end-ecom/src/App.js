@@ -34,7 +34,8 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<Main />} />
-        <Route path="/:id" element={<DetailView categories={categories}/>}/>
+        <Route path="/<int:id>" element={<DetailView categories={categories}/>}/>
+        <Route path="/:val" element={<Main/>}/>
         <Route path="/auth/:usertype" element={token? usertype==="merchant"?<div><AddItem /><ShowList/></div>:<Navigate to="/"/> :<AuthPage/>} />
         <Route path="/cart" element={<Cart/>}/>  
         <Route path="/checkout" element={<CheckOut/>}/>      
