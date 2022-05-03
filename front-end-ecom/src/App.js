@@ -1,7 +1,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { Fragment} from 'react';
-
+import {StickyContainer} from 'react-sticky'
 import './App.css';
 import Header from "./components/Header/Header";
 import AddItem from "./components/Merchant/Add";
@@ -31,7 +31,10 @@ function App() {
   return (
     
     <Fragment>
+      <StickyContainer>
       <Header />
+      </StickyContainer>
+   
       <Routes>
         <Route path="/" element={<Main />} />
         <Route path="/<int:id>" element={<DetailView categories={categories}/>}/>

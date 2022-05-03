@@ -168,7 +168,6 @@ class User:
     def login(email,password):
         try:
             data=Users.query.filter_by(user_email=email).first()
-            print(data.user_email)
         except:
             return {"message":"There is a problem in Database connection"}
         email=data.user_email
@@ -180,7 +179,7 @@ class User:
             token = jwt.encode({"email": email, "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=30)},app.config['SECRET_KEY'])
             return jsonify({"token":token,"userType":"customer","email":email,"name":data.name})
         else:
-            jsonify({"message":"Login is not a successful attempt"})
+            return jsonify({"message":"Login is not a successful attempt"})
     #product_id,user_id,inCart,status,quantity):
     def purchase(product_id,entered_number_of_products,user_id,status):
         print(str(product_id)+" "+str(user_id))

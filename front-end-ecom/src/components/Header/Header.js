@@ -1,48 +1,40 @@
-import { Fragment, useState } from "react";
+import style from "./Header.module.css"
+import {Fragment} from 'react'
+import { useSelector } from "react-redux";
+import { useState } from "react";
 import Cart from "../Cart/Cart";
-import "./Header.css"
-
 const Header = () => {
 
-// const params = "";
-  const name=localStorage.getItem("name")
+  const [modalOpen, setModalOpen] = useState(false);
+  const {CartItem} = useSelector((state) => state);
+  
+  const name=localStorage.getItem("name");
+  const userType=localStorage.getItem("userType")  
+
+  let content;
+  if(userType==="merchant"){
+    content=<Fragment>
+      <span>Sell here</span>
+    </Fragment>
+  }else if(userType==="customer"){
+    content=<Fragment>
+      <span>{name.split(' ')[0]}</span>
+    </Fragment>
+  }else{
+    content=<Fragment>
+      <a href="/auth/user">Login/Signup</a>
+    </Fragment>
+  }
   return(
-    <div className="Header">
-    <nav className="navbar nav navbar-expand-lg pl-2">
-    <a className="navbar-brand brand" href="/">ECOM SITE</a>
-    
-    <div className="search-container"><input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Search"></input> <button type="submit" class="btn btn-primary">Submit</button></div>
-    {name ?<span>{name.split(" ")[0]}</span>:<a className="navbar-brand" href="/auth/user">LOGIN/SIGNUP</a>}
-
-    {/* <div className="cart-icon">
-
-
-      <img onClick={() => {
-          setModalOpen(true);
-        }}
-         src="../images/cart.png" alt="cart"/>
-      {CartItem.length === 0 ? "" : <p>{CartItem.length}</p>}
-    </div> */}
-  {/* <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-    <span className="navbar-toggler-icon"></span>
-  </button>
-  <div className="collapse navbar-collapse" id="navbarNav">
-    <ul className="navbar-nav ">
-      <li className="nav-item active">
-        <a className="nav-link" href="/merchant">Add New Item </a>
-      </li>
-      <li className="nav-item">
-        <a className="nav-link" href="/merchant/edit">Edit Item</a>
-      </li>
-    </ul>
-  </div> */}
-
-  
-
-  </nav>
-
-  
-  </div>
+   <Fragment>
+     <nav className={style.container}>
+       <ul className={style.title}><div className={style.container_name}><a href="/">Ecom -site</a></div> </ul>
+       <ul className={style.input}><input className={style.input_field}/> <button className={style.button}>Search</button></ul>
+       <ul className={style.login}><button className={style.button_login}>{content} </button></ul>
+       <ul className={style.login}><button className={style.button_login} onClick={()=>{setModalOpen(true)}}><span>{CartItem.length === 0 ? <img src="../images/cart.png" alt="This is cart" className={style.cart_icon}></img> : <span>{CartItem.length}</span>}</span></button></ul>
+     </nav>
+     {modalOpen && <Cart setOpenModal={setModalOpen} />}
+   </Fragment>
   )
 };
 

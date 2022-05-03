@@ -1,4 +1,4 @@
-import "./VerticalHeader.css"
+import styles from "./VerticalHeader.module.css"
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router";
@@ -20,6 +20,7 @@ const VerticalHeader  = (props) => {
         localStorage.removeItem("token")
         localStorage.removeItem("email")
         localStorage.removeItem("name")
+        window.location.reload(false);
     }
 
     const fetchData=async()=>{
@@ -33,26 +34,29 @@ const VerticalHeader  = (props) => {
     const clickHandler = (name) =>{
         setCategory(name)
         navigate(`/${name}`)
+
     }
 
     return(
-        <div className="Main-vertical">
+        <div className={styles.Main_vertical}>
+            <div>
             <p>Users</p>
-            <div className="vertical-menu">
+            <div className={styles.vertical_menu}>
                 <a href="/" >Profile</a>
                 <a href="/">Purchases</a>
-                <a onClick={signoutHandler} href>Signout</a>
+                <a onClick={signoutHandler} href="/">Signout</a>
             </div>
             <p>Shop By Department</p>
-            <div className="vertical-menu">
-                {categories.map((item)=>(
-                    <a key={item.id} onClick={()=>clickHandler(item.name)}>{item.value}</a>
+            <div className={styles.vertical_menu}>
+                {categories.map((item,index)=>(
+                    <button key={index} onClick={()=>clickHandler(item.name)}>{item.value}</button>
                 ))}
             </div>
             <p>Filters</p>
-            <div className="vertical-menu">
+            <div className={styles.vertical_menu}>
                 <a href="/">Filter by price</a>
                 <a href="/">Filter by Brand</a>
+            </div>
             </div>
         </div>
     )

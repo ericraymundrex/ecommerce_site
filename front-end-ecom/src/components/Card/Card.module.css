@@ -1,8 +1,6 @@
 /* div{
 width: 100%
-} */
-
-
+} */  
 .Card{
     /* margin: 2.2rem 1rem; */
     display: flex;
@@ -25,8 +23,7 @@ width: 100%
     flex-wrap: wrap;
     position: relative;
     padding-left: 1.65rem;
-
-
+    text-align: center;
 }
 
 .Row p{
@@ -50,10 +47,16 @@ width: 100%
     right: 0;
 }
 
-.Element{
+.element{
     margin: 1.2rem 0.5rem;
     min-width: 12rem;
     width: 23%;
     height: 20rem;
 }
 
+.button{
+    background-color: #97BCC7;
+}
+.head{
+    margin-left: 20px;
+}

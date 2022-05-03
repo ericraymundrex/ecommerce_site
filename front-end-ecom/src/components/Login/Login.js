@@ -1,5 +1,5 @@
-import { Fragment, useState } from "react"
-import "./Login.css"
+import { useState } from "react"
+import styles from "./Login.module.css"
 import axios from 'axios'
 import { useParams } from "react-router-dom";
 
@@ -16,7 +16,7 @@ const Login = () => {
           headers:{'Content-Type': 'application/json'}
         });
 
-        console.log(token.data.token)
+        console.log(token.data)
         localStorage.setItem("token",token.data.token)
         localStorage.setItem("userType",token.data.userType)
         localStorage.setItem("email",token.data.email)
@@ -34,10 +34,10 @@ const Login = () => {
 
     return(
 
-        <Fragment>
-        <form onSubmit={loginHandler} className="Login">
+        <div className={styles.background}>
+        <form onSubmit={loginHandler} className={styles.login}>
         <h3>Login Page, welcome</h3>
-            <div className="container">
+            <div className={styles.container}>
             
         <div className="mb-3 mt-3">
           <label htmlFor="email">Email</label>
@@ -45,7 +45,7 @@ const Login = () => {
             type="email"
             name="email"
             id="email"
-            className="form-control"
+            className={`${styles.form_content} form-control`}
             placeholder="Enter Email"
             onChange={emailChangeHandler}
             value={email}
@@ -58,13 +58,13 @@ const Login = () => {
             name="password"
             id="password"
             placeholder="Enter Password"
-            className="form-control"
+            className={`${styles.form_content} form-control`}
             onChange={passwordChangeHandler}
             value={password}
           />
         </div>
         <div className="btn-container">
-        <button type="submit" className="btn btn-primary">
+        <button type="submit" className={`${styles.btn} ${styles.btn_primary} btn btn-primary`}>
           Login
         </button>
         {/* <button type="submit" className="btn btn-primary">
@@ -74,7 +74,7 @@ const Login = () => {
         
         </div>
       </form> 
-      </Fragment>   
+      </div>   
       )
 }
 

@@ -1,0 +1,53 @@
+.Main_vertical{
+    display:flex;
+    flex-flow: column;
+    padding-left: 0.3rem;
+    width: 15rem;
+    width: 375px;
+    align-items: center;
+    background-color: #053D57;
+    color: #F2F1EF;
+}
+
+.vertical_menu {
+  max-width: 200px;
+  max-height: 250px;
+  overflow-y: auto;
+  border-radius: 0.65rem;
+}
+
+.Main_vertical p{
+  font-weight: bold;
+  font-size: 110%;
+  margin: 0.25rem;
+}
+
+.vertical_menu a {
+  background-color: #eee;
+  color: black;
+  display: block;
+  padding: 12px;
+  text-decoration: none;
+  color: black;
+}
+
+.vertical_menu button {
+  background-color: #eee;
+  color: black;
+  display: block;
+  padding: 12px;
+  text-decoration: none;
+  width: 180px;
+  background-color: white;
+  box-shadow: opx;
+  margin: 0;
+}
+
+.vertical_menu a:hover {
+  background-color: #ccc;
+}
+
+.vertical_menu a.active {
+  background-color: #04AA6D;
+  color: white;
+}
