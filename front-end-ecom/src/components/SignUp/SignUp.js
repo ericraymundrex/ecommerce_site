@@ -1,4 +1,4 @@
-import "./SignUp.css"
+import style from "./SignUp.module.css"
 import { Fragment, useState } from "react"
 import axios  from "axios"
 import { useParams } from "react-router-dom";
@@ -39,7 +39,7 @@ const SignUp = () =>{
     }
     return(
         <Fragment>
-        <form onSubmit={loginHandler} className="SignUp">
+        <form onSubmit={loginHandler} className={style.SignUp}>
         <h3>Sign Up, and happy shopping</h3>
             <div className="container">
 

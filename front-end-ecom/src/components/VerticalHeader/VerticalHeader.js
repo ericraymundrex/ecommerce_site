@@ -13,7 +13,7 @@ const VerticalHeader  = (props) => {
     const categories = props.categories
     const navigate = useNavigate()
     const [category,setCategory] = useState("")
-    
+    const token=localStorage.getItem("token")
     const signoutHandler=(event)=>{
         event.preventDefault()
         localStorage.removeItem("userType")
@@ -34,7 +34,6 @@ const VerticalHeader  = (props) => {
     const clickHandler = (name) =>{
         setCategory(name)
         navigate(`/${name}`)
-
     }
 
     return(
@@ -44,7 +43,7 @@ const VerticalHeader  = (props) => {
             <div className={styles.vertical_menu}>
                 <a href="/" >Profile</a>
                 <a href="/">Purchases</a>
-                <a onClick={signoutHandler} href="/">Signout</a>
+               { token?<a onClick={signoutHandler} href="/">Signout</a>:""}
             </div>
             <p>Shop By Department</p>
             <div className={styles.vertical_menu}>

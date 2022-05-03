@@ -2,7 +2,9 @@ import { createStore } from "redux";
 
 const initialState = {
     CartItem: [],
-    Modal: false
+    ModalCart: false,
+    ModalSearch: false,
+    SearchTerm: ""
 };
 
 const crudReducer = (state = initialState, action) => {
@@ -16,13 +18,19 @@ const crudReducer = (state = initialState, action) => {
     if (action.type === "ModalCart") {
       return {
         ...state,
-        Modal: action.value,
+        ModalCart: action.value,
       };
     }
     if (action.type === "ModalSearch") {
       return {
         ...state,
-        Modal: action.value,
+        ModalSearch: action.value,
+      };
+    }
+    if (action.type === "SearchTerm") {
+      return {
+        ...state,
+        SearchTerm: action.value,
       };
     }
     return state;

@@ -1,5 +1,5 @@
 import { Fragment, useState, useEffect } from "react"
-import "./ShowList.css"
+// import "./ShowList.css"
 import axios from "axios"
 
 const config = {

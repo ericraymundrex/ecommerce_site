@@ -34,7 +34,7 @@ width: 100%
 }
 
 #left,#right{
-    /* position: absolute; */
+    position: absolute;
     border: 0;
     top: 7rem;
 }

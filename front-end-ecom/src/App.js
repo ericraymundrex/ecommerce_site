@@ -1,21 +1,19 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Routes, Route, Navigate } from "react-router-dom";
-import { Fragment, useState} from 'react';
+import style from './App.module.css'
 import {StickyContainer} from 'react-sticky'
-import './App.css';
+
 import Header from "./components/Header/Header";
-import AddItem from "./components/Merchant/Add";
+// import AddItem from "./components/Merchant/Add";
 import Main from "./components/Main/Main";
 import Cart from "./components/Cart/Cart";
 import DetailView from "./components/DetailView/DetailView";
 import AuthPage from "./components/AuthPage/AuthPage";
 import CheckOut from "./components/CheckOut/CheckOut";
-import ShowList from "./components/Merchant/ShowList";
-import SearchModal from "./components/SearchModal/SearchModal";
-
+// import ShowList from "./components/Merchant/ShowList";
+import MerchantUI from "./components/Merchant/MerchantUI";
 function App() {
 
-  // console.log(openModal)
 
   //to be conmeted
   const categories = [{'id':1,'value':'Electronics'},
@@ -32,20 +30,22 @@ function App() {
 
   return (
     
-    <Fragment>
-      {/* <StickyContainer> */}
-      <Header/>
-      {/* </StickyContainer> */}
+    <div className={style.max_height}>
+      <StickyContainer>
+      <Header />
+      </StickyContainer>
+   
       <Routes>
-        <Route path="/" element={<Main/>} />
-        <Route path="/<int:id>" element={<DetailView categories={categories}/>}/>
-        <Route path="/:val" element={<Main/>}/>
-        <Route path="/auth/:usertype" element={token? usertype==="merchant"?<div><AddItem /><ShowList/></div>:<Navigate to="/"/> :<AuthPage/>} />
+        <Route path="/" element={<Main />} />
+
+        <Route path="/item/:id" element={<DetailView categories={categories}/>}/>
+        <Route path="/auth/:usertype" element={token? usertype==="merchant"?<MerchantUI />:<Navigate to="/"/> :<AuthPage/>} />
         <Route path="/cart" element={<Cart/>}/>  
-        <Route path="/checkout" element={<CheckOut/>}/>
+        <Route path="/checkout" element={<CheckOut/>}/>      
+        <Route path="/:val" element={<Main/>}/>
       </Routes>
       {/* <Footer /> */}
-    </Fragment>
+    </div>
   );
 }
 

@@ -4,16 +4,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import Cart from "../Cart/Cart";
 import axios from "axios"
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
 
-  const [openModal, setSearchModal] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
   const {CartItem} = useSelector((state) => state);
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   
   const fetchdata = async () =>{
     const res = await axios.get("/search")
-    console.log(res.data.data)
   }
 
   useEffect(()=>{
@@ -41,6 +42,12 @@ const Header = () => {
     </Fragment>
   }
 
+  const SubmitHandler = (event) =>{
+    console.log(event.target.search.value)
+    dispatch({type:"SearchTerm",value:event.target.search.value}  )
+
+  }
+
   return(
    <Fragment>
      <div>
@@ -48,13 +55,17 @@ const Header = () => {
        {/* <ul className={style.title}><div className={style.container_name}></div> </ul> */}
        <a href="/">Ecom -site</a>
        <ul className={style.input}>
+         <form method="POST" action="/search" onSubmit={SubmitHandler}>
          <input 
-          onFocus={()=>setSearchModal(openModal)} 
+          name="search"
+          onFocus={()=>dispatch({type:"ModalSearch",value:true})}
+          onBlur={()=>dispatch({type:"ModalSearch",value:false})}
+          onChange={(event)=>dispatch({type:"SearchTerm",value:event.target.value})} 
           className={style.input_field}
         /> 
         <button className={style.button}>
           Search
-        </button></ul>
+        </button></form></ul>
 
        <ul className={style.login}>
          <button className={style.button_login}>
@@ -63,7 +74,7 @@ const Header = () => {
         </ul>
        <ul className={style.login}>
          <button className={style.button_login} 
-          onClick={()=>OpenModalHandler(true)}
+          onClick={()=>OpenModalHandler()}
           >
           <span>
             {CartItem.length === 0 

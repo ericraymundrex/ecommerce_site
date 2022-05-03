@@ -1,6 +1,6 @@
 import { Fragment, useState, useEffect } from "react"
 import axios from "axios"
-import "./ShowList.css"
+import style from "./ShowList.module.css"
 import File from "../File/File"
 import uuid from 'react-uuid'
 const config = {
@@ -13,6 +13,7 @@ const config = {
 const AddItem = () =>{
   const [img_id,]=useState(uuid())
   const [categories,setCategories] = useState([])
+  
   const fetchCat=async()=>{
       const res=await axios.get("/category",config);
       setCategories(res.data.data)
@@ -86,8 +87,9 @@ const AddItem = () =>{
     // }
     // console.log(files)
     return(
+      
         <Fragment>
-            <form onSubmit={submitHandler} className="AddItem" >
+           { <form onSubmit={submitHandler} className={style.AddItem} >
         <h3>Add New Item Page</h3>
             <div className="container">
 
@@ -171,7 +173,7 @@ const AddItem = () =>{
         </div>
         
         </div>
-      </form> 
+      </form> }
       
         </Fragment>
     )

@@ -1,8 +1,4 @@
-
-from crypt import methods
-from unicodedata import category
-from numpy import product
-from Model import Products, Merchant, Users, Purchase, db, app
+from Model import Products, Merchant as Merchant_model,Users,Purchase,db,app
 from Merchant import Merchant
 from flask import request, jsonify
 import bcrypt
@@ -16,6 +12,7 @@ import os
 
 import boto3 as aws
 import glob
+import re
 #--------------------------------------------------------------------------------------------------------------------
 #------------------------------------------------------------ MERCHANT-----------------------------------------------
 #--------------------------------------------------------------------------------------------------------------------
@@ -167,18 +164,21 @@ class User:
     def login(email,password):
         try:
             data=Users.query.filter_by(user_email=email).first()
+            print(data)
         except:
             return {"message":"There is a problem in Database connection"}
-        email=data.user_email
-        hash=data.hash
-        salt=data.salt
-        hashed = bcrypt.hashpw(password.encode('utf-8'), salt)
-
+        try:
+            email=data.user_email
+            hash=data.hash
+            salt=data.salt
+            hashed = bcrypt.hashpw(password.encode('utf-8'), salt)
+        except AttributeError:
+            return jsonify({"message":"Email is wrong"})
         if (hashed == hash):
             token = jwt.encode({"email": email, "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=30)},app.config['SECRET_KEY'])
             return jsonify({"token":token,"userType":"customer","email":email,"name":data.name})
         else:
-            return jsonify({"message":"Login is not a successful attempt"})
+            return jsonify({"message":"Password is wrong"})
     #product_id,user_id,inCart,status,quantity):
     def purchase(product_id,entered_number_of_products,user_id,status):
         print(str(product_id)+" "+str(user_id))
@@ -197,13 +197,20 @@ class User:
         updateItem.product_rating=int((updateItem.product_rating+int(rating))/2)
         db.session.commit()
         return {"message":"success"}
+
     def purchase_history(user_id):
-        # result=db.session.query(Purchase,Users).select_from(Users).join(Users).filter(Users.user_id==user_id).all()
-        # data=[]
-        # for purchase,user in result:
-        #     data.append(purchase)
-        # return jsonify({"data":data})  
-        pass     
+        print(user_id["email"])
+        user=db.session.query(Users.user_id).filter_by(user_email=user_id["email"]).first()
+        print(user.user_id)
+        result=db.session.query(Purchase,Products,Users).filter(Users.user_id==Purchase.user_id).filter(Purchase.product_id==Products.product_id).filter(Purchase.user_id==user.user_id).all()
+        data=[]
+        for p,pro,u in result:
+            data.append({
+                "user_email":u.user_email,
+                "purchase_id":p.purchase_id,
+                "product_name":pro.product_name,
+                "product_price":pro.product_price})
+        return {"data":data}
 
 @app.route("/user/signup",methods=["POST"])
 def signup_user():
@@ -249,6 +256,8 @@ def review():
     id=request_sent['id']
     rate=request_sent['rate']
     return User.Reviews(id,rate)
+
+
 #--------------------------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------------------------
@@ -280,26 +289,27 @@ class Page():
         return {"data":products}
     def detail_view(product_id):
         
-        products=db.session.query(Products.product_id,Products.product_name,Products.product_price,Products.product_description, Products.product_category, Products.product_available_qty, Products.product_rating).filter(Products.product_id==product_id)
+        products=db.session.query(Products.product_id,Products.product_name,Products.product_price,Products.product_description, Products.product_category, Products.product_available_qty, Products.product_rating, Products.img_id).filter(Products.product_id==product_id)
         product=[]
         for p in products:
-            product.append({"name":p.product_name,"id":p.product_id,"price":p.product_price,"description":p.product_description,"product_category":p.product_category,"product_available_qty":p.product_available_qty,"product_rating":p.product_rating})
+            print(p)
+            product.append({"name":p.product_name,"id":p.product_id,"price":p.product_price,"description":p.product_description,"product_category":p.product_category,"product_available_qty":p.product_available_qty,"product_rating":p.product_rating,"img":p.img_id})
         return {"data":product}
 
     def filter_By_Category(category):
-
         products = db.session.query(Products.product_id,Products.product_name,Products.product_price,Products.product_description, Products.product_category, Products.product_available_qty,Products.product_rating,Products.img_id).filter(Products.product_category == category).all()
         product = []
         for p in products:
             product.append({"name":p.product_name,"id":p.product_id,"price":p.product_price,"description":p.product_description,"product_category":p.product_category,"product_available_qty":p.product_available_qty,"product_rating":p.product_rating,"img":"http://localhost:5000/static/"+str(p.img_id)+str(".png")})
         return {"data":product}
-
-    def get_search():
+    
+    def get_search():       
         query = db.session.query(Products).all()
         products = []
         for p in query:
-            products.append({"name":p.product_name,"product_category":p.product_category})
-        return {"data":products}        
+            products.append({"name":p.product_name,"product_category":p.product_category,"id":p.product_id})
+        return {"data":products}
+
 
 @app.route("/home",methods=["POST"])
 @cross_origin(supports_credentials=True)
@@ -331,11 +341,12 @@ def filter_category(val):
             category_name += (" " + str(val[i]))
     return Page.filter_By_Category(category_name)
 
-@app.route("/search",methods=["GET"])
+@app.route("/search",methods=["GET","POST"])
 @cross_origin(supports_credentials=True)
 def search():
+    # posts=Products.query.whoosh_search(request.args.get('query')).all()
+    # return jsonify({"data":posts})
     return Page.get_search()
-
 
 if __name__ == "__main__":
     app.run(debug=True,port=5000)

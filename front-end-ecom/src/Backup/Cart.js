@@ -1,13 +1,12 @@
-import { Fragment, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { Fragment } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import "./Cart.css"
 
-const Cart = () =>{
-
-    const {CartItem, Modal} = useSelector((state) => state)
-    const dispatch = useDispatch()
+const Cart = ({setOpenModal}) =>{
+    const {CartItem} = useSelector((state) => state)
     const navigate = useNavigate()
+    console.log(CartItem)
 
     const renderBody = Object.values(CartItem).map((item)=>{
             
@@ -26,7 +25,7 @@ const Cart = () =>{
         <div className="titleCloseBtn">
           <button
             onClick={() => {
-              dispatch({type:"ModalCart",value:false})
+              setOpenModal(false);
             }}
           >
             X
@@ -35,26 +34,26 @@ const Cart = () =>{
         <div className="title">
           <h1>Your Cart</h1>
         </div>
-        <div className="body">
-          <p>{renderBody}</p>
-        </div>
+        
+            {renderBody}
+          {/* {CartItem.maps((item)=>(
+              <p>{item</p>
+          ))} */}
+        
         <div className="footer">
           <button
             onClick={() => {
-              dispatch({type:"ModalCart",value:false})
+              setOpenModal(false);
             }}
             id="cancelBtn"
           >
             Cancel
           </button>
-          <button>Continue</button>
+          <button onClick={()=> navigate("/checkout")}>Continue</button>
         </div>
       </div>
     </div>
-
-    
-
-</Fragment>
+        </Fragment>
     )
 }
 

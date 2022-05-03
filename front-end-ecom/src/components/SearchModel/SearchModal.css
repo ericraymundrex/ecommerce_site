@@ -1,0 +1,25 @@
+
+
+.Search {
+    width: 54%;
+    max-height: 20rem;
+    margin: 0;
+    margin-left: 8.5rem;
+    position: relative;
+    border: 3px solid black;
+    border-top: 0;
+    overflow-y: auto;
+    /* opacity: 10%; */
+}
+
+.Search p{
+    font-size: 130%;
+    font-weight: 500;
+    margin: 0;
+    padding: 0.4rem 1rem;
+    border-bottom: 2px solid rgb(124, 124, 124);
+}
+
+.Search p:hover{
+    background-color: rgb(240, 240, 240);
+}

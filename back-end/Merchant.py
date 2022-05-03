@@ -75,11 +75,14 @@ class Merchant:
             data=Merchant_model.query.filter_by(merchant_email=email.lower()).first()
         except:
             return {"message":"There is a problem in Database connection"}
-        email=data.merchant_email
-        name=data.merchant_name
-        hash=data.hash
-        salt=data.salt
-        hashed = bcrypt.hashpw(password.encode('utf-8'), salt)
+        try:
+            email=data.merchant_email
+            name=data.merchant_name
+            hash=data.hash
+            salt=data.salt
+            hashed = bcrypt.hashpw(password.encode('utf-8'), salt)
+        except AttributeError:
+            return jsonify({"message":"Email is wrong"})
         if (hashed == hash):
             token = jwt.encode({"email": email,"name":name, "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=30)},app.config['SECRET_KEY'])
             return jsonify({"token":token,"userType":"merchant","email":email,"name":name})

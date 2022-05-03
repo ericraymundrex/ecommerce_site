@@ -1,4 +1,5 @@
-.login{
+
+.AddItem{
     justify-content: center;
     margin-left: 500px;
     margin-right: 500px;
@@ -9,3 +10,12 @@
     padding: 10px;
 }
 
+.ShowList{
+    position: relative;
+    margin-top: 10rem;
+    border: 2px solid black;
+}
+
+.ShowList thead{
+    font-weight: bold;
+}
