@@ -2,7 +2,7 @@
 from crypt import methods
 from unicodedata import category
 from numpy import product
-from Model import Products, Merchant as Merchant_model,Users,Purchase,db,app
+from Model import Products, Merchant, Users, Purchase, db, app
 from Merchant import Merchant
 from flask import request, jsonify
 import bcrypt
@@ -16,7 +16,6 @@ import os
 
 import boto3 as aws
 import glob
-import re
 #--------------------------------------------------------------------------------------------------------------------
 #------------------------------------------------------------ MERCHANT-----------------------------------------------
 #--------------------------------------------------------------------------------------------------------------------
@@ -295,6 +294,13 @@ class Page():
             product.append({"name":p.product_name,"id":p.product_id,"price":p.product_price,"description":p.product_description,"product_category":p.product_category,"product_available_qty":p.product_available_qty,"product_rating":p.product_rating,"img":"http://localhost:5000/static/"+str(p.img_id)+str(".png")})
         return {"data":product}
 
+    def get_search():
+        query = db.session.query(Products).all()
+        products = []
+        for p in query:
+            products.append({"name":p.product_name,"product_category":p.product_category})
+        return {"data":products}        
+
 @app.route("/home",methods=["POST"])
 @cross_origin(supports_credentials=True)
 def home_page():
@@ -328,8 +334,7 @@ def filter_category(val):
 @app.route("/search",methods=["GET"])
 @cross_origin(supports_credentials=True)
 def search():
-    posts=Products.query.whoosh_search(request.args.get('query')).all()
-    return jsonify({"data":posts})
+    return Page.get_search()
 
 
 if __name__ == "__main__":

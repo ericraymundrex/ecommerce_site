@@ -4,15 +4,18 @@ import axios from "axios";
 import Product from "../Product/Product";
 
 import Cart from "../Cart/Cart";
+import { useSelector } from "react-redux";
 
 
 // import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 
 const Card = () =>{
+
     const [pos,setPos]=useState(1)
     const [modalOpen, setModalOpen] = useState(false);
     const [cartItems, setCartItems] = useState([]);
     const [posts,setPosts]=useState({});
+    
 
     const onAdd = (product) => {
         const exist = cartItems.find((x) => x.id === product.id);
@@ -35,6 +38,8 @@ const Card = () =>{
     }
     useEffect(()=>{
         fetchPost()
+        // setModalOpen(Modal)
+
     },[pos])
     
     

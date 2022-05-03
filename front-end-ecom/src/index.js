@@ -5,12 +5,12 @@ import App from './App';
 import { BrowserRouter } from "react-router-dom";
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
-import crudApp from "./Store/CrudApp"
+import crudStore from "./Store/crudStore"
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   
     <BrowserRouter>
-    <Provider store={crudApp}>
+    <Provider store={crudStore}>
             <App />
         </Provider>
     </BrowserRouter>
