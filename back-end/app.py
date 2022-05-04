@@ -312,6 +312,13 @@ class Page():
             products.append({"name":p.product_name,"product_category":p.product_category,"id":p.product_id})
         return {"data":products}
 
+    def render_search():
+        query = db.session.query(Products).all()
+        products = []
+        for p in query:
+            products.append({"name":p.product_name,"id":p.product_id,"price":p.product_price,"description":p.product_description,"product_category":p.product_category,"product_available_qty":p.product_available_qty,"product_rating":p.product_rating,"img":"static/"+str(p.img_id)+str(".png")})
+        return {"data":products}
+
     def cat(name):
         query = db.session.query(Products).filter_by(product_category=name).all()
         products = []
@@ -366,10 +373,11 @@ def filter_category(val):
 @app.route("/search",methods=["GET","POST"])
 @cross_origin(supports_credentials=True)
 def search():
-    # posts=Products.query.whoosh_search(request.args.get('query')).all()
-    # return jsonify({"data":posts})
-    return Page.get_search()
-
+    if request.method == "GET":
+        return Page.get_search()
+    
+    elif request.method == "POST":
+        return Page.render_search()
 if __name__ == "__main__":
     app.run(debug=True,port=5000)
     # print(Page.category_price_range_brand())
