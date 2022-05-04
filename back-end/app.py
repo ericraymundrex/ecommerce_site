@@ -110,8 +110,8 @@ def img():
     for file_in_static in statics_folder:
         client = aws.client('s3');
         client.upload_file(file_in_static, bucket_name, file_in_static.split("/")[1])
-    # for file in statics_folder:
-    #     os.remove(file)
+    for file in statics_folder:
+        os.remove(file)
 
     if success and errors:
         errors['message'] = 'File(s) successfully uploaded'

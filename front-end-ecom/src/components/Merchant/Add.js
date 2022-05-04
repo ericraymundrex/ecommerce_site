@@ -146,10 +146,13 @@ const AddItem = () =>{
           <select name='cat' 
             onChange={catChangeHandler}
           >
-          {categories.map((item)=>(
-              <option key={item.id} value={item.value}>{item.value}</option>
-          ))}
-            
+          <option  value="MenFashion">Men Fashion</option>     
+          <option  value="WomenFashion">Women Fashion</option>
+          <option  value="Electronics">Electronics</option>
+          <option  value="Mobile">Mobile</option>
+          <option  value="SportItem">Sport Item</option> 
+          <option  value="Home">Home</option>
+          <option value="Toys">Toys</option>
           </select>
 
         </div>

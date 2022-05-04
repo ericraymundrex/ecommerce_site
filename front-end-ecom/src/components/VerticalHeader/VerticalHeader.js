@@ -1,6 +1,6 @@
 import styles from "./VerticalHeader.module.css"
 import axios from "axios"
-import { useEffect, useState } from "react"
+import { Fragment, useEffect, useState } from "react"
 import { useNavigate } from "react-router";
 const config = {
     headers:{
@@ -39,12 +39,14 @@ const VerticalHeader  = (props) => {
     return(
         <div className={styles.Main_vertical}>
             <div>
-            <p>Users</p>
+            { token? <Fragment>
+                <p>Users</p>
             <div className={styles.vertical_menu}>
                 <a href="/" >Profile</a>
                 <a href="/">Purchases</a>
-               { token?<a onClick={signoutHandler} href="/">Signout</a>:""}
+               <a onClick={signoutHandler} href="/">Signout</a>
             </div>
+            </Fragment>:""}
             <p>Shop By Department</p>
             <div className={styles.vertical_menu}>
                 {categories.map((item,index)=>(
