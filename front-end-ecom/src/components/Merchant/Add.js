@@ -2,7 +2,6 @@ import { Fragment, useState, useEffect } from "react"
 import axios from "axios"
 import style from "./ShowList.module.css"
 import File from "../File/File"
-import uuid from 'react-uuid'
 import AuthError from '../AuthError/AuthError'
 const config = {
   headers:{
@@ -12,9 +11,9 @@ const config = {
 };
 
 const AddItem = () =>{
-  const [img_id,]=useState(uuid())
+
   const [categories,setCategories] = useState([])
-  
+  const [message,setMessage]=useState('')
   const fetchCat=async()=>{
       const res=await axios.get("/category",config);
       setCategories(res.data.data)
@@ -60,6 +59,7 @@ const AddItem = () =>{
       setData(res.data.data)
   }
   useEffect(()=>{
+
       fetchData()
       fetchCat()
   },[])
@@ -68,6 +68,7 @@ const AddItem = () =>{
     
     const submitHandler = async(event)=>{
       event.preventDefault();
+
         await axios.post("/merchant",{
           id:'',
           name:name,
@@ -75,7 +76,7 @@ const AddItem = () =>{
           cat:category,
           des:description,
           price:price,
-          img_id:img_id
+          img_id:localStorage.getItem("img_id")
       },config);
 
 // console.log(files[0])
@@ -87,9 +88,20 @@ const AddItem = () =>{
     //     setFiles(event.target.files)
     // }
     // console.log(files)
+    const uploading=()=>{
+      setMessage("uploading the files, please don't refresh")
+    }
+    const success=()=>{
+      setMessage("Successfully added")
+    }
+    const removeNotification=()=>{
+      setMessage('')
+    }
     return(
       
         <Fragment>
+          {message===''?"":message==="Successfully added" ?<AuthError removeNotification={removeNotification} style_used={"alert alert-success mb-0"} message={"Successfully added"} userType="all"/>:<AuthError removeNotification={removeNotification} style_used={"alert alert-warning mb-0"} message={"Loading please wait"} userType="all"/>}
+          
            { <form onSubmit={submitHandler} className={style.AddItem} >
         <h3>Add New Item Page</h3>
             <div className="container">
@@ -109,7 +121,7 @@ const AddItem = () =>{
         <div className="mb-3 mt-3">
           <label htmlFor="qty">Quantity</label>
           <input
-            type="text"
+            type="number"
             name="qty"
             id="qty"
             className="form-control"
@@ -120,7 +132,7 @@ const AddItem = () =>{
         <div className="mb-3 mt-3">
           <label htmlFor="price">Price</label>
           <input
-            type="text"
+            type="number"
             name="price"
             id="price"
             className="form-control"
@@ -165,12 +177,12 @@ const AddItem = () =>{
             onChange={imgChangeHandler}
           />
         </div>  */}
-        <File img_id={img_id}/>
+        <File uploading={uploading} success={success}/>
         <div className="btn-container">
         
-        <button type="submit" className="btn btn-primary">
-          Add Item
-        </button>
+        {/* <button type="submit" > */}
+          {/* Add Item
+        </button> */}
         </div>
         
         </div>

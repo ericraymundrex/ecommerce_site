@@ -86,7 +86,7 @@ def allowed_file(filename):
 @app.route('/merchant/img',methods=["POST"])
 @cross_origin(supports_credentials=True)
 def img():
-    bucket_name = "system-item-bucket"
+    bucket_name = "myawsbucket-for-cap-1"
 
     if 'files[]' not in request.files:
             # response = jsonify({"messgae": "No file in the request"})
