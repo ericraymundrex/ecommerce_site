@@ -4,3 +4,20 @@
 .heading{
     font-family: 'Times New Roman', Times, serif;
 }
+.item{
+    justify-content: center;
+    margin-left: 600px;
+    margin-right: 600px;
+    border-style:solid ;
+    margin-top: 100px;
+    border-color: black;
+    border-radius: 10px;
+    padding: 30px;
+}
+.text{
+    margin-right: 20px;
+}
+.price{
+    border: 0ch;
+    float: right;
+}

@@ -11,6 +11,7 @@ import DetailView from "./components/DetailView/DetailView";
 import AuthPage from "./components/AuthPage/AuthPage";
 import CheckOut from "./components/CheckOut/CheckOut";
 // import ShowList from "./components/Merchant/ShowList";
+import Result from "./components/Result/Result";
 import MerchantUI from "./components/Merchant/MerchantUI";
 function App() {
 
@@ -42,7 +43,7 @@ function App() {
         <Route path="/auth/:usertype" element={token? usertype==="merchant"?<MerchantUI />:<Navigate to="/"/> :<AuthPage/>} />
         <Route path="/cart" element={<Cart/>}/>  
         <Route path="/checkout" element={<CheckOut/>}/>      
-        <Route path="/:val" element={<Main/>}/>
+        <Route path="/:val" element={<Result/>}/>
       </Routes>
       {/* <Footer /> */}
     </div>

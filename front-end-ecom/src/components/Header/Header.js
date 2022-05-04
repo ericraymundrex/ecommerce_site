@@ -55,7 +55,7 @@ const Header = () => {
        {/* <ul className={style.title}><div className={style.container_name}></div> </ul> */}
        <a href="/">Ecom -site</a>
        <ul className={style.input}>
-         <form method="POST" action="/search" onSubmit={SubmitHandler}>
+         <form method="POST" action="/search" onSubmit={SubmitHandler} autocomplete="off">
          <input 
           name="search"
           onFocus={()=>dispatch({type:"ModalSearch",value:true})}

@@ -235,6 +235,7 @@ def purchase():
     user_email=jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])    
     if request.method=="POST":
         request_sent=request.get_json()
+        print(request_sent)
         # product_id=request_sent['product_id']
         # quantity=request_sent['quantity']
         # status=request_sent['status']
@@ -310,6 +311,12 @@ class Page():
             products.append({"name":p.product_name,"product_category":p.product_category,"id":p.product_id})
         return {"data":products}
 
+    def cat(name):
+        query = db.session.query(Products).filter_by(product_category=name).all()
+        products = []
+        for p in query:
+            products.append({"name":p.product_name,"product_category":p.product_category,"id":p.product_id})
+        return {"data":products}        
 
 @app.route("/home",methods=["POST"])
 @cross_origin(supports_credentials=True)
@@ -323,6 +330,20 @@ def home_page():
 # @cross_origin(supports_credentials=True)
 def get_category_list():
     return Page.Unique_Categories()
+
+@app.route("/category",methods=["POST"])
+@cross_origin(supports_credentials=True)
+def get_particular_Category():
+    request_sent=request.get_json()
+    print(request_sent)
+    name=request_sent["name"]
+    new_text=""
+    for i, letter in enumerate(name):
+        if i and letter.isupper():
+            new_text += ' '
+        new_text += letter
+    # print(new_text)
+    return Page.cat(new_text)
 
 @app.route("/product/<id>",methods=["GET"])
 @cross_origin(supports_credentials=True)

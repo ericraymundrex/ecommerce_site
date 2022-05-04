@@ -10,17 +10,29 @@ const CheckOut = () =>{
 
     const purchaseHandler=async(event)=>{
         event.preventDefault();
-        let token=localStorage.getItem("token")
-
+        console.log(CartItem)
+        let datas=[]
+        for (let data in CartItem){
+            datas.push({"id":data.id})
+        }
         await axios.post("/user/purchase",{
-            "data":CartItem
-        },{
-            headers:{"Content-Type":"application/json","token":token}
-        })
+            "data":datas
+        },{"headers":{"token":localStorage.getItem("token")}});
     }
     return (
         <Fragment>
-            
+            <div className={styles.item}>
+            {CartItem.map((item,index)=>{
+               return <div key={index} >
+                   <span className={styles.text}>{item.name}</span>
+                   <span className={styles.price}>{item.price}</span>
+                </div>
+           })} 
+           <div className={styles.price}>-----</div>
+           <br />
+           <div className={styles.price}>{sum}</div>
+            </div>
+           <button onClick={purchaseHandler}>Checkout</button>
         </Fragment>
     )
 }

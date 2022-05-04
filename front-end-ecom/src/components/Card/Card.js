@@ -2,15 +2,17 @@ import  styles from "./Card.module.css"
 import { useState,useEffect } from "react";
 import axios from "axios";
 import Product from "../Product/Product";
-
+import { useParams } from "react-router-dom";
 import Cart from "../Cart/Cart";
 import { useSelector } from "react-redux";
 
 
 // import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 
-const Card = () =>{
+const Card = props =>{
+    const {val} =useParams()
 
+    console.log("name "+val)
     const [pos,setPos]=useState(1)
     const [modalOpen, setModalOpen] = useState(false);
     const [cartItems, setCartItems] = useState([]);
@@ -32,16 +34,24 @@ const Card = () =>{
     
     
     const fetchPost=async()=>{
+      
+      console.log(val)
+      if(props.val==="val"){
+        const res=await axios.post(`/category`,{
+          offset:pos,
+          name:val
+        },{headers:{"Content-Type":"application/json"}});
+        setPosts(res.data.data)
+      }else{
         const res=await axios.post("/home",{offset:pos},{headers:{"Content-Type":"application/json"}});
         setPosts(res.data.data)
-        
+      }
     }
     useEffect(()=>{
         fetchPost()
         // setModalOpen(Modal)
 
-    },[pos])
-    
+    },[pos,val])
     
     
     const renderTrendingPosts=Object.values(posts).map((post)=>{
