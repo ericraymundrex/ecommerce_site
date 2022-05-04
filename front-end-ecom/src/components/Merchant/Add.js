@@ -3,6 +3,7 @@ import axios from "axios"
 import style from "./ShowList.module.css"
 import File from "../File/File"
 import uuid from 'react-uuid'
+import AuthError from '../AuthError/AuthError'
 const config = {
   headers:{
     "token": localStorage.getItem('token'),
