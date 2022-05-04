@@ -85,7 +85,7 @@ def allowed_file(filename):
 
 @app.route('/merchant/img',methods=["POST"])
 def img():
-    bucket_name = "myawsbucket-for-cap-1"
+    bucket_name = "system-item-bucket"
 
     if 'files[]' not in request.files:
             # response = jsonify({"messgae": "No file in the request"})
@@ -273,7 +273,7 @@ class Page():
         all_products=db.session.query(Products.product_id,Products.product_name,Products.product_price,Products.product_description, Products.product_category, Products.product_available_qty,Products.product_rating,Products.img_id).offset(offseter).limit(10).all()
         products=[]
         for p in all_products:
-            products.append({"name":p.product_name,"id":p.product_id,"price":p.product_price,"description":p.product_description,"product_category":p.product_category,"product_available_qty":p.product_available_qty,"product_rating":p.product_rating,"img":"static/"+str(p.img_id)+str(".png")})
+            products.append({"name":p.product_name,"id":p.product_id,"price":p.product_price,"description":p.product_description,"product_category":p.product_category,"product_available_qty":p.product_available_qty,"product_rating":p.product_rating,"img":"https://myawsbucket-for-cap-1.s3.amazonaws.com/"+str(p.img_id)+str(".png")})
         return {"data":products}
 
     def Unique_Categories():
@@ -316,7 +316,7 @@ class Page():
         query = db.session.query(Products).filter_by(product_category=name).all()
         products = []
         for p in query:
-            products.append({"name":p.product_name,"product_category":p.product_category,"id":p.product_id})
+            products.append({"name":p.product_name,"id":p.product_id,"price":p.product_price,"description":p.product_description,"product_category":p.product_category,"product_available_qty":p.product_available_qty,"product_rating":p.product_rating,"img":"https://myawsbucket-for-cap-1.s3.amazonaws.com/"+str(p.img_id)+str(".png")})
         return {"data":products}        
 
 @app.route("/home",methods=["POST"])
