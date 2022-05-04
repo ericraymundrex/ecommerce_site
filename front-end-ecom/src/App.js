@@ -13,6 +13,7 @@ import CheckOut from "./components/CheckOut/CheckOut";
 // import ShowList from "./components/Merchant/ShowList";
 import Result from "./components/Result/Result";
 import MerchantUI from "./components/Merchant/MerchantUI";
+import Purchase from './components/Purchase/Purchase'
 function App() {
 
 
@@ -44,6 +45,7 @@ function App() {
         <Route path="/cart" element={<Cart/>}/>  
         <Route path="/checkout" element={<CheckOut/>}/>      
         <Route path="/:val" element={<Result/>}/>
+        <Route path="/purchase" element={<Purchase />}/>
       </Routes>
       {/* <Footer /> */}
     </div>

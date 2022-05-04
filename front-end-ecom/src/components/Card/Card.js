@@ -3,8 +3,8 @@ import { useState,useEffect } from "react";
 import axios from "axios";
 import Product from "../Product/Product";
 import { useParams } from "react-router-dom";
-import Cart from "../Cart/Cart";
-import { useSelector } from "react-redux";
+// import Cart from "../Cart/Cart";
+// import { useSelector } from "react-redux";
 
 
 // import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
@@ -14,7 +14,7 @@ const Card = props =>{
 
     console.log("name "+val)
     const [pos,setPos]=useState(1)
-    const [modalOpen, setModalOpen] = useState(false);
+    // const [modalOpen, setModalOpen] = useState(false);
     const [cartItems, setCartItems] = useState([]);
     const [posts,setPosts]=useState({});
     

@@ -248,6 +248,7 @@ def purchase():
         return {"message":"success"}
 
     if request.method=="GET":
+        print(user_email)
         return User.purchase_history(user_email)
 
 @app.route("/user/review",methods=["POST"])
