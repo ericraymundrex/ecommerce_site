@@ -18,14 +18,6 @@ const AddItem = () =>{
       const res=await axios.get("/category",config);
       setCategories(res.data.data)
   }
-    // const categories = [{'id':0,'value':''},
-    //                     {'id':1,'value':'Electronics'},
-    //                     {'id':2,'value':'Men Fashion'},
-    //                     {'id':3,'value':'Women Fashion'},
-    //                     {'id':4,'value':'Mobile Phone'},
-    //                     {'id':5,'value':'Sports Item'},
-    //                     {'id':6,'value':'Men Footware'},
-    //                     {'id':7,'value':'Women Footware'}]
     
     const [name,setName]=useState('')
     const [quantity,setQty]=useState('')
@@ -78,16 +70,7 @@ const AddItem = () =>{
           price:price,
           img_id:localStorage.getItem("img_id")
       },config);
-
-// console.log(files[0])
-    
     }
-
-
-    // const imgChangeHandler=(event)=>{
-    //     setFiles(event.target.files)
-    // }
-    // console.log(files)
     const uploading=()=>{
       setMessage("uploading the files, please don't refresh")
     }
@@ -146,18 +129,19 @@ const AddItem = () =>{
           <select name='cat' 
             onChange={catChangeHandler}
           >
-          <option  value="MenFashion">Men Fashion</option>     
-          <option  value="WomenFashion">Women Fashion</option>
+          <option  value="Men Fashion">Men Fashion</option>     
+          <option  value="Women Fashion">Women Fashion</option>
           <option  value="Electronics">Electronics</option>
           <option  value="Mobile">Mobile</option>
-          <option  value="SportItem">Sport Item</option> 
+          <option  value="Sport Item">Sport Item</option> 
           <option  value="Home">Home</option>
-          <option value="Toys">Toys</option>
+          <option  value="Toys">Toys</option>
+          <option  value="Men Footware">Men Footware</option>
+          <option  value="Women Footware">Women Footware</option>
+          
           </select>
-
         </div>
-                  {/* <p>{{categories}}</p> */}
-
+        
         <div className="mb-3 mt-3">
           <label htmlFor="des">Description</label>
           <input
@@ -169,23 +153,10 @@ const AddItem = () =>{
             onChange={desChangeHandler}
           />
         </div>
-        {/* <div className="mb-3 mt-3">
-          <label htmlFor="des">Image</label>
-          <input
-            type="file"
-            name="des"
-            id="des"
-            className="form-control"
-            placeholder="Enter Description"
-            onChange={imgChangeHandler}
-          />
-        </div>  */}
+        
         <File uploading={uploading} success={success}/>
         <div className="btn-container">
         
-        {/* <button type="submit" > */}
-          {/* Add Item
-        </button> */}
         </div>
         
         </div>

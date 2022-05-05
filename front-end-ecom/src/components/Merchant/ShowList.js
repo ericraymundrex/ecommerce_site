@@ -1,6 +1,8 @@
 import { Fragment, useState, useEffect } from "react"
 // import "./ShowList.css"
 import axios from "axios"
+import { Routes, useNavigate, Route } from "react-router-dom";
+import AddItem from "./Add";
 
 const config = {
     headers:{
@@ -11,16 +13,21 @@ const config = {
 
 const ShowList = () =>{
     const [data,setData] = useState([])
+    const navigate = useNavigate()
     const fetchData=async()=>{
       const res=await axios.get("/merchant",config);
       console.log(res.data.data)
       setData(res.data.data)
-  }
-  useEffect(()=>{
-      fetchData()
-  },[])
-  console.log(data)
-  
+    }
+    // const 
+    useEffect(()=>{
+        fetchData()
+    },[])
+    const deleteHandler = async (id)=>{
+        const res = await axios.delete("/merchant/"+id,config)
+        console.log(res)
+        fetchData()
+    }
     return(
         <Fragment>
             <table className="table table-striped ShowList">
@@ -41,14 +48,15 @@ const ShowList = () =>{
                             <td>{item.product_available_qty}</td>
                             <td>{item.product_rating} / 5</td>
                             <td>
-                                <a href="/{item.product_id}">Delete</a>
-                                <a href="/edit/{item.product_id}">Edit</a>
+                                <button onClick={()=>deleteHandler(item.product_id)}>Delete</button>
+                                <a href={`/edit/${item.product_id}`}>Edit</a>
                             </td>
                         </tr>
                     ))}
 
                 </tbody>
             </table>
+
         </Fragment>
     )
 }

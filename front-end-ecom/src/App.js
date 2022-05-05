@@ -14,6 +14,9 @@ import CheckOut from "./components/CheckOut/CheckOut";
 import Result from "./components/Result/Result";
 import MerchantUI from "./components/Merchant/MerchantUI";
 import Purchase from './components/Purchase/Purchase'
+import Search from "./components/Search/Search"
+import EditItem from "./components/Merchant/Edit";
+import AddItem from "./components/Merchant/Add";
 function App() {
 
 
@@ -46,6 +49,8 @@ function App() {
         <Route path="/checkout" element={<CheckOut/>}/>      
         <Route path="/:val" element={<Result/>}/>
         <Route path="/purchase" element={<Purchase />}/>
+        <Route path="/search/:id" element={<Search/>}/>
+        <Route path="/edit/:id" element={<EditItem/>}/>
       </Routes>
       {/* <Footer /> */}
     </div>

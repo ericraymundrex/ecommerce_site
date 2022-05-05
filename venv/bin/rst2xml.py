@@ -1,4 +1,4 @@
-#!/home/patel/Documents/Capstone-Ecommerce/venv/bin/python
+#!/home/patel/Documents/Capstone-Ecom/venv/bin/python
 
 # $Id: rst2xml.py 4564 2006-05-21 20:44:42Z wiemann $
 # Author: David Goodger <goodger@python.org>

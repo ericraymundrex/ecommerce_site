@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 const Header = () => {
 
   const [searchTerm, setSearchTerm] = useState("");
-  const {CartItem} = useSelector((state) => state);
+  const {CartItem, SearchTerm} = useSelector((state) => state);
   const dispatch = useDispatch()
   const navigate = useNavigate()
   
@@ -43,11 +43,11 @@ const Header = () => {
   }
 
   const SubmitHandler = (event) =>{
+    event.preventDefault()
     console.log(event.target.search.value)
-    dispatch({type:"SearchTerm",value:event.target.search.value}  )
-
+    dispatch({type:"SearchTerm",value:event.target.search.value})
+    navigate(`/search/${event.target.search.value}`)
   }
-
   return(
    <Fragment>
      <div>

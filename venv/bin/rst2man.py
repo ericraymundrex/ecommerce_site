@@ -1,4 +1,4 @@
-#!/home/patel/Documents/Capstone-Ecommerce/venv/bin/python
+#!/home/patel/Documents/Capstone-Ecom/venv/bin/python
 
 # Author: 
 # Contact: grubert@users.sf.net
