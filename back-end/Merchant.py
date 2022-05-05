@@ -19,8 +19,8 @@ class Merchant:
             updateItem.product_available_qty=qty
             updateItem.product_category=cat
             updateItem.product_description=des
-            updateItem.merchants=merchant_session
-            updateItem.product_rating=product_rating
+            # updateItem.merchants=merchant_session
+            # updateItem.product_rating=product_rating
             updateItem.img_id=img_id
             db.session.commit()
 
@@ -33,6 +33,9 @@ class Merchant:
             db.session.commit()
             return{"message":"success"}
 
+    def getItem(id):
+        result = Products.query.filter_by(product_id=id).first()
+        return jsonify({"name":result.product_name,"id":id,"category":result.product_category,"description":result.product_description,"qty":result.product_available_qty,"price":result.product_price,"img_id":result.img_id})
         
     def deleteItem(id):
         Products.query.filter_by(product_id=id).delete()
@@ -50,8 +53,7 @@ class Merchant:
                 "product_available_qty":product.product_available_qty,
                 "product_rating":product.product_rating
             })
-        return jsonify({"data":data})
-        
+        return jsonify({"data":data})            
 
     def signup(email,password,name):
         exist=db.session.query(Merchant_model.merchant_id).filter_by(merchant_email=email.lower()).first() is not None

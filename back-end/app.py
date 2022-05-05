@@ -1,3 +1,4 @@
+from unicodedata import name
 from Model import Products, Merchant as Merchant_model,Users,Purchase,db,app
 from Merchant import Merchant
 from flask import request, jsonify
@@ -77,6 +78,22 @@ def root():
 @token_required_merchant
 def delete(id):
     return Merchant.deleteItem(id)
+
+@app.route("/merchant/edit/<int:id>",methods=["POST","GET"])
+@token_required_merchant
+def edit(id):
+    
+    if request.method == "POST":
+        request_sent=request.get_json()
+        name = request_sent['name']
+        qty = int(request_sent['qty'])
+        cat = request_sent['cat']
+        des = request_sent['des']
+        price = int(request_sent['price'])
+        img_id=request_sent['img_id']
+        return Merchant.addItem(id,name,qty,cat,price,des,"",0,img_id)
+    elif request.method == "GET":
+        return Merchant.getItem(id)
 
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'mp4'}
 
@@ -316,12 +333,20 @@ class Page():
             products.append({"name":p.product_name,"product_category":p.product_category,"id":p.product_id})
         return {"data":products}
 
+    def render_search():
+        query = db.session.query(Products).all()
+        products = []
+        for p in query:
+            products.append({"name":p.product_name,"id":p.product_id,"price":p.product_price,"description":p.product_description,"product_category":p.product_category,"product_available_qty":p.product_available_qty,"product_rating":p.product_rating,"img":"https://myawsbucket-for-cap-1.s3.amazonaws.com/"+str(p.img_id)+str(".png")})
+        return {"data":products}
+
     def cat(name):
         query = db.session.query(Products).filter_by(product_category=name).all()
         products = []
         for p in query:
             products.append({"name":p.product_name,"id":p.product_id,"price":p.product_price,"description":p.product_description,"product_category":p.product_category,"product_available_qty":p.product_available_qty,"product_rating":p.product_rating,"img":"https://myawsbucket-for-cap-1.s3.amazonaws.com/"+str(p.img_id)+str(".png")})
-        return {"data":products}        
+        return {"data":products}  
+
 
 @app.route("/home",methods=["POST"])
 @cross_origin(supports_credentials=True)
@@ -370,9 +395,11 @@ def filter_category(val):
 @app.route("/search",methods=["GET","POST"])
 @cross_origin(supports_credentials=True)
 def search():
-    # posts=Products.query.whoosh_search(request.args.get('query')).all()
-    # return jsonify({"data":posts})
-    return Page.get_search()
+    if request.method == "GET":
+        return Page.get_search()
+
+    elif request.method == "POST":
+        return Page.render_search()
 
 if __name__ == "__main__":
     app.run(debug=True,port=5000)
